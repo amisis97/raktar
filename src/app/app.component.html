@@ -1,2 +1,11 @@
-<button>OKÉ</button>
-<router-outlet></router-outlet>
+<app-navbar></app-navbar>
+<mat-sidenav-container class="example-container">
+  <mat-sidenav mode="side" opened>
+    Sidenav content
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
