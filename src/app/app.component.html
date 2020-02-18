@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <mat-sidenav-container class="example-container">
-  <mat-sidenav mode="side" opened>
-    Sidenav content
+  <mat-sidenav mode="side" opened *ngIf="isLoggedIn">
+    <app-menu></app-menu>
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>
