@@ -1,1 +1,13 @@
-<p>menu works!</p>
+<div id="menu">
+  <div class="profile">
+    <div class="profile-img">
+      <img src="assets/user.svg">
+    </div>
+    <div class="flex-break"></div>
+    <span>Admin</span>
+  </div>
+  <div class="menu-item" *ngFor="let menu of menuItems">
+    <img src="{{menu.icon}}">
+    <span>{{menu.title}}</span>
+  </div>
+</div>

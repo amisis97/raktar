@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -7,9 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private authService: AuthService
+  ) { }
+
+  menuItems = [
+    {
+      title: 'Menü1',
+      url: '/menu1',
+      icon: '/icon.png'
+    },
+    {
+      title: 'Menü2',
+      url: '/menu2',
+      icon: '/icon2.png'
+    }
+  ];
 
   ngOnInit() {
+
   }
 
 }

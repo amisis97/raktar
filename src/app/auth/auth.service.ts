@@ -25,13 +25,13 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const result = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-    console.log(result);
+    window.location.replace('/home');
   }
 
   async logout() {
     await this.afAuth.auth.signOut();
     localStorage.removeItem('user');
-    console.log('logout');
+    window.location.replace('/login');
   }
 
   get isLoggedIn(): boolean {

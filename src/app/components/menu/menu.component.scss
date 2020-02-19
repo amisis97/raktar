@@ -1,0 +1,30 @@
+@import "../../../variables.scss";
+$border-bottom: 1px solid #ccc;
+
+#menu .profile-img {
+  height: 40px;
+  width: 40px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+#menu .profile {
+  display: flex;
+  flex-flow: row wrap;
+  display: -ms-flexbox;
+  justify-content: center;
+  padding: 20px 0;
+  border-bottom: $border-bottom;
+}
+#menu .menu-item {
+  height: 60px;
+  font-size: 18px;
+  border-bottom: $border-bottom;
+  display: flex;
+  align-items: center;
+}
+#menu .menu-item:hover {
+  background-color: #273238;
+}
+

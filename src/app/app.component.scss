@@ -1,0 +1,10 @@
+@import '../variables.scss';
+
+#leftMenu {
+  width: 300px;
+  background-color: $sideNavBgColor;
+  color: $sideNavColor;
+}
+#mainPanel {
+  height: $navbarHeight;
+}
