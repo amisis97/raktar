@@ -7,7 +7,7 @@ import { HomeComponent } from './pages/home/home.component';
 
 
 const routes: Routes = [
-  //{ path: '', component: LoginComponent },
+  // { path: '', component: LoginComponent },
   { path: '', component: AppComponent, canActivate: [LoginGuardSerive] },
   { path: 'home', component: HomeComponent, canActivate: [LoginGuardSerive] },
   { path: 'login', component: LoginComponent },

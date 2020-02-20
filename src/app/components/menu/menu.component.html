@@ -10,4 +10,5 @@
     <img src="{{menu.icon}}">
     <span>{{menu.title}}</span>
   </div>
+  <button *ngIf="isLoggedIn" mat-raised-button (click)="logout()">Kijelentkezés</button>
 </div>

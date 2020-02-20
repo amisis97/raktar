@@ -22,6 +22,9 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
 import { MatButtonModule, MatCardModule, MatDialogModule, MatInputModule,
   MatTableModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
 import { HomeComponent } from './pages/home/home.component';
+import { Database } from './database.service';
+// Firebase
+import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import { HomeComponent } from './pages/home/home.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFirestoreModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -53,7 +57,8 @@ import { HomeComponent } from './pages/home/home.component';
   providers: [
     AuthService,
     LoginGuardSerive,
-    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
+    Database,
+    AngularFirestore
   ],
   bootstrap: [AppComponent]
 })

@@ -12,6 +12,8 @@ export class MenuComponent implements OnInit {
     private authService: AuthService
   ) { }
 
+  isLoggedIn = this.authService.isLoggedIn;
+
   menuItems = [
     {
       title: 'Menü1',
@@ -27,6 +29,10 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

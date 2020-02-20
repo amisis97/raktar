@@ -34,8 +34,16 @@ export class AuthService {
     window.location.replace('/login');
   }
 
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user !== null;
+  getUser() {
+    console.log(this.user);
+    return this.user;
   }
+
+  get isLoggedIn(): boolean {
+    if (this.getUser !== null) {
+      return true;
+    }
+    return false;
+  }
+
 }

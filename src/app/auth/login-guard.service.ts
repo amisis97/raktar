@@ -11,7 +11,7 @@ export class LoginGuardSerive implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const loggedIn = this.authService.isLoggedIn;
-    if(loggedIn) {
+    if (loggedIn) {
       return true;
     } else {
       this.router.navigate(['/login']);
