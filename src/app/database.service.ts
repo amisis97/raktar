@@ -22,7 +22,8 @@ export class Database {
       return this.db.collection('users').valueChanges();
     }
 
-    getUser(id) {
-      return this.db.collection('users').doc(id).ref.get();
+    getUser(id: string) {
+      const c = 'users/' + id;
+      return this.db.doc(c).valueChanges();
     }
 }

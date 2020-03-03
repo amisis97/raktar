@@ -35,12 +35,21 @@ export class AuthService {
   }
 
   getUser() {
-    console.log(this.user);
-    return this.user;
+    const user = JSON.parse(localStorage.getItem('user'));
+    return user;
+  }
+
+  get getUserId(): string {
+    if (!this.isLoggedIn) {
+      return null;
+    }
+    const user = this.getUser();
+    return user.uid;
   }
 
   get isLoggedIn(): boolean {
-    if (this.getUser !== null) {
+    const user = this.getUser();
+    if (user) {
       return true;
     }
     return false;
