@@ -17,10 +17,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.db.getUsers();
-    this.db.getUser(id)
-      .subscribe(res => {
-         = res;
-      });
   }
 
   getUsers() {
@@ -33,7 +29,7 @@ export class HomeComponent implements OnInit {
   getUser(id) {
     return this.db.getUser(id)
       .subscribe(res => {
-        this.user = res;
+        //this.user = res;
       });
   }
 
