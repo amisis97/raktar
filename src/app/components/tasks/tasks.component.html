@@ -4,32 +4,75 @@
   <input matInput (keyup)="applyFilter($event)" placeholder="keresés...">
 </mat-form-field>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 task-table">
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.id}} </td>
-  </ng-container>
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Cím</th>
     <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.name}} </td>
   </ng-container>
   <ng-container matColumnDef="created">
     <th mat-header-cell *matHeaderCellDef>Létrehozva</th>
-    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.created}} </td>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.created.toDateString()}} </td>
   </ng-container>
   <ng-container matColumnDef="deadline">
     <th mat-header-cell *matHeaderCellDef>Határidő</th>
-    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.deadline}} </td>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.deadline.toDateString()}} </td>
   </ng-container>
   <ng-container matColumnDef="priority">
     <th mat-header-cell *matHeaderCellDef>Fontos</th>
-    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"><mat-checkbox [(ngModel)]="element.priority"></mat-checkbox></td>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element">
+      <mat-checkbox [(ngModel)]="element.priority"></mat-checkbox>
+    </td>
   </ng-container>
   <ng-container matColumnDef="done">
     <th mat-header-cell *matHeaderCellDef>Kész</th>
-    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"><mat-checkbox [(ngModel)]="element.done"></mat-checkbox></td>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element">
+      <mat-checkbox [(ngModel)]="element.done"></mat-checkbox>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="delete">
+    <th class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
+    <td class="align-right" (click)="selectRow(element)" mat-cell *matCellDef="let element">
+      <i class="material-icons">delete</i>
+    </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-<h3>{{selectedElement.name}}</h3>
-<h4>{{selectedElement.description}}</h4>
+<div *ngIf="selectedElement" class="selected-elem">
+  <h2>{{selectedElement.name}}</h2>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Cím</mat-label>
+      <input matInput placeholder="{{selectedElement.name}}" value="{{selectedElement.name}}">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Choose a date</mat-label>
+      <input matInput [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <button mat-flat-button color="primary">Módosítás</button>
+  </form>
+</div>
+
+<mat-expansion-panel class="add-new-task">
+  <mat-expansion-panel-header>Új feladat hozzáadása</mat-expansion-panel-header>
+  <form class="example-form">
+    <mat-form-field>
+      <mat-label>Cím</mat-label>
+      <input name="title" matInput placeholder="" value="">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Határidő</mat-label>
+      <input name="deadline" matInput [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <mat-label>Megjegyzés</mat-label>
+      <textarea name="description" matInput placeholder="Kezdj el gépelni..."></textarea>
+    </mat-form-field>
+    <mat-checkbox name="priority">Fontos</mat-checkbox>
+    <button mat-flat-button color="primary">Hozzáadás</button>
+  </form>
+</mat-expansion-panel>

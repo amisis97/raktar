@@ -26,4 +26,8 @@ export class Database {
       const c = 'users/' + id;
       return this.db.doc(c).valueChanges();
     }
+
+    getTasks() {
+      return this.db.collection('tasks').valueChanges();
+    }
 }

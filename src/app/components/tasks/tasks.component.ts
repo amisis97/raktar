@@ -1,17 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormControl } from '@angular/forms';
+import { Database } from 'src/app/database.service';
+
+export interface TaskElement {
+  name: string;
+  description: string;
+  created: Date;
+  deadline: Date;
+  priority: boolean;
+  done: boolean;
+}
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss']
 })
+
 export class TasksComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name', 'created', 'deadline', 'priority', 'done'];
-  elements = [
-    {
-      id: 1,
+  displayedColumns: string[] = ['name', 'created', 'deadline', 'priority', 'done', 'delete'];
+  elements: TaskElement[] = [
+    /*{
       name: 'Task1',
       description: 'Ez egy nagyon fontos feladat',
       created: '2020-03-20',
@@ -20,7 +30,6 @@ export class TasksComponent implements OnInit {
       done: false
     },
     {
-      id: 2,
       name: 'Task2',
       description: 'Ez egy másik feladat',
       created: '2020-02-21',
@@ -29,25 +38,36 @@ export class TasksComponent implements OnInit {
       done: false
     },
     {
-      id: 3,
       name: 'Task3',
       description: 'Ez egy sokadik feladat',
       created: '2020-01-20',
       deadline: '2020-03-28',
       priority: false,
       done: true
-    }
+    }*/
   ];
   title = 'Feladatok / Teendők / Jegyzetek lista';
   dataSource = new MatTableDataSource(this.elements);
-  selectedElement = this.elements[0];
+  selectedElement = null;
+  date = new FormControl(new Date());
 
 
 
-  constructor() {
+  constructor(
+    private db: Database,
+  ) {
   }
 
   ngOnInit() {
+    console.log(this.date.value);
+    this.db.getTasks().subscribe(tasks => {
+      this.elements = tasks as TaskElement[];
+      this.elements.forEach(elem => {
+        elem.created = new Date(elem.created.seconds * 1000);
+        elem.deadline = new Date(elem.deadline.seconds * 1000);
+      });
+      this.dataSource = new MatTableDataSource(this.elements);
+    });
   }
 
   applyFilter(event: Event) {
@@ -56,7 +76,11 @@ export class TasksComponent implements OnInit {
   }
 
   selectRow(element) {
-    this.selectedElement = element;
+    if (JSON.stringify(element) === JSON.stringify(this.selectedElement) ) {
+      this.selectedElement = null;
+    } else {
+      this.selectedElement = element;
+    }
   }
 
 }

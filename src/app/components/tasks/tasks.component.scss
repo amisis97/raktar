@@ -1,3 +1,15 @@
 .task-table {
   width: 100%;
 }
+.task-table .align-right {
+  text-align: right;
+}
+.add-new-task {
+  margin: 15px 0px
+}
+.add-new-task .mat-form-field {
+  margin-left: 10px;
+}
+.add-new-task .mat-checkbox {
+  margin: 0px 15px;
+}
