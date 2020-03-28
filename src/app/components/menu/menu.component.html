@@ -4,7 +4,7 @@
       <img src="assets/user.svg">
     </div>
     <div class="flex-break"></div>
-    <span>Admin</span>
+    <span *ngIf="this.user">{{this.user.displayName}}</span>
   </div>
   <div class="menu-item" *ngFor="let menu of menuItems">
     <img src="{{menu.icon}}">

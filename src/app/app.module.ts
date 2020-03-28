@@ -18,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Material
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatButtonModule, MatCardModule, MatDialogModule, MatInputModule,
   MatTableModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
@@ -25,6 +26,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { Database } from './database.service';
 // Firebase
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
+import { TasksComponent } from './components/tasks/tasks.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestor
     LoginComponent,
     MenuComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    TasksComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,8 @@ import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestor
     MatTableModule,
     MatMenuModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatCheckboxModule,
   ],
   providers: [
     AuthService,

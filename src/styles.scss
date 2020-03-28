@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import "variables.scss";
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -10,4 +12,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   height: 0;
   width: 0;
   overflow: hidden;
+}
+.panel {
+  padding: 15px;
+  background-color: $panelBgColor;
+  height: 100%;
+  color: $panelTextColor;
+}
+.panel h1 {
+  margin: 5px 0;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.panel h2 {
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 1px;
 }

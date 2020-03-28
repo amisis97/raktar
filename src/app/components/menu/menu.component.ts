@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Database } from 'src/app/database.service';
+import { User } from 'firebase';
 
 @Component({
   selector: 'app-menu',
@@ -8,9 +10,17 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class MenuComponent implements OnInit {
 
+  user: any;
+
   constructor(
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    private db: Database,
+  ) {
+    this.db.getUser(this.authService.getUserId).subscribe(user => {
+      this.user = user;
+      console.log(user);
+    });
+  }
 
   isLoggedIn = this.authService.isLoggedIn;
 
@@ -28,6 +38,10 @@ export class MenuComponent implements OnInit {
   ];
 
   ngOnInit() {
+
+  }
+
+  getCurrentUser() {
 
   }
 

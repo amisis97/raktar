@@ -1,0 +1,35 @@
+<h2 class="title">{{title}}</h2>
+<mat-form-field>
+  <mat-label>Kereső</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="keresés...">
+</mat-form-field>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 task-table">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Cím</th>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="created">
+    <th mat-header-cell *matHeaderCellDef>Létrehozva</th>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.created}} </td>
+  </ng-container>
+  <ng-container matColumnDef="deadline">
+    <th mat-header-cell *matHeaderCellDef>Határidő</th>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"> {{element.deadline}} </td>
+  </ng-container>
+  <ng-container matColumnDef="priority">
+    <th mat-header-cell *matHeaderCellDef>Fontos</th>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"><mat-checkbox [(ngModel)]="element.priority"></mat-checkbox></td>
+  </ng-container>
+  <ng-container matColumnDef="done">
+    <th mat-header-cell *matHeaderCellDef>Kész</th>
+    <td (click)="selectRow(element)" mat-cell *matCellDef="let element"><mat-checkbox [(ngModel)]="element.done"></mat-checkbox></td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<h3>{{selectedElement.name}}</h3>
+<h4>{{selectedElement.description}}</h4>
