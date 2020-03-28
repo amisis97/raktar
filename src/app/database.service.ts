@@ -22,12 +22,8 @@ export class Database {
       return this.db.collection('users').valueChanges();
     }
 
-    getUser(id) {
-      return new Promise(resolve => {
-        this.db.collection('users').doc(id).ref
-        .get().then(res => {
-          resolve(res);
-        });
-      });
+    getUser(id: string) {
+      const c = 'users/' + id;
+      return this.db.doc(c).valueChanges();
     }
 }

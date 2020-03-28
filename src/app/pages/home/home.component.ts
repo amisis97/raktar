@@ -14,25 +14,26 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private db: Database,
-    private auth: AuthService
+    private auth: AuthService,
   ) { }
 
   ngOnInit() {
-    this.getUsers();
-    this.getCurrentUser();
+    this.db.getUsers();
   }
 
-  getCurrentUser() {
-    this.auth.getUser()
-    .subscribe(res => {
-      let uid = res.uid;
-      let user = this.db.getUser(uid);
-      console.log(user);
-    });
+  getUsers() {
+    this.db.getUsers()
+      .subscribe(res => {
+        return res;
+      });
   }
 
-  getUsers = () =>
-      this.db.getUsers()
-      .subscribe(res => console.log(res));
+  getUser(id) {
+    return this.db.getUser(id)
+      .subscribe(res => {
+        //this.user = res;
+      });
+  }
+
 
 }
