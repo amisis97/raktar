@@ -35,8 +35,7 @@ export class AuthService {
   }
 
   getUser() {
-    console.log(this.user);
-    return this.user;
+    return this.afAuth.user;
   }
 
   get isLoggedIn(): boolean {

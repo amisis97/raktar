@@ -10,6 +10,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class HomeComponent implements OnInit {
 
+  email = '';
+
   constructor(
     private db: Database,
     private auth: AuthService
@@ -17,7 +19,16 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.getUsers();
-    console.log(this.auth.getUser());
+    this.getCurrentUser();
+  }
+
+  getCurrentUser() {
+    this.auth.getUser()
+    .subscribe(res => {
+      let uid = res.uid;
+      let user = this.db.getUser(uid);
+      console.log(user);
+    });
   }
 
   getUsers = () =>

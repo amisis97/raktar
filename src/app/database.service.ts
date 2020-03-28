@@ -23,6 +23,11 @@ export class Database {
     }
 
     getUser(id) {
-      return this.db.collection('users').doc(id).ref.get();
+      return new Promise(resolve => {
+        this.db.collection('users').doc(id).ref
+        .get().then(res => {
+          resolve(res);
+        });
+      });
     }
 }
