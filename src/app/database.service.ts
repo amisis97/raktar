@@ -28,6 +28,15 @@ export class Database {
     }
 
     getTasks() {
-      return this.db.collection('tasks').valueChanges();
+      return this.db.collection('tasks').valueChanges({idField: 'taskId'});
+    }
+
+    addTask(task) {
+      this.db.collection('tasks').add(task);
+    }
+
+    deleteTask(taskId) {
+      const c = 'tasks/' + taskId;
+      this.db.doc(c).delete();
     }
 }

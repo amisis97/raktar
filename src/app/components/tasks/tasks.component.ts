@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
-import { FormControl } from '@angular/forms';
+import { MatTableDataSource, MatSnackBar } from '@angular/material';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Database } from 'src/app/database.service';
 
 export interface TaskElement {
@@ -10,6 +10,7 @@ export interface TaskElement {
   deadline: Date;
   priority: boolean;
   done: boolean;
+  taskId: string;
 }
 
 @Component({
@@ -19,7 +20,8 @@ export interface TaskElement {
 })
 
 export class TasksComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'created', 'deadline', 'priority', 'done', 'delete'];
+  public taskForm: FormGroup;
+  displayedColumns: string[] = ['name', 'created', 'deadline', 'priority', 'done', 'details', 'delete'];
   elements: TaskElement[] = [
     /*{
       name: 'Task1',
@@ -49,24 +51,45 @@ export class TasksComponent implements OnInit {
   title = 'Feladatok / Teendők / Jegyzetek lista';
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
-  date = new FormControl(new Date());
 
 
 
   constructor(
     private db: Database,
+    private snackBar: MatSnackBar
   ) {
   }
 
   ngOnInit() {
-    console.log(this.date.value);
     this.db.getTasks().subscribe(tasks => {
+      console.log(tasks);
       this.elements = tasks as TaskElement[];
-      this.elements.forEach(elem => {
-        elem.created = new Date(elem.created.seconds * 1000);
-        elem.deadline = new Date(elem.deadline.seconds * 1000);
-      });
       this.dataSource = new MatTableDataSource(this.elements);
+    });
+
+    this.taskForm = new FormGroup({
+      name: new FormControl('', [Validators.required, Validators.maxLength(60)]),
+      deadline: new FormControl(new Date()),
+      description: new FormControl(''),
+      priority: new FormControl(false)
+    });
+  }
+
+  public hasError = (controlName: string, errorName: string) =>{
+    return this.taskForm.controls[controlName].hasError(errorName);
+  }
+
+  public createTask = (taskFormValue: any) => {
+    taskFormValue.created = new Date();
+    this.db.addTask(taskFormValue);
+    this.taskForm.reset();
+  }
+
+  deleteTask(taskId) {
+    this.selectedElement = null;
+    this.db.deleteTask(taskId);
+    this.snackBar.open('Sikeres törlés!', null, {
+      duration: 2000,
     });
   }
 
@@ -76,7 +99,7 @@ export class TasksComponent implements OnInit {
   }
 
   selectRow(element) {
-    if (JSON.stringify(element) === JSON.stringify(this.selectedElement) ) {
+    if (element === this.selectedElement) {
       this.selectedElement = null;
     } else {
       this.selectedElement = element;
