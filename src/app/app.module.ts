@@ -29,7 +29,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { Database } from './database.service';
 // Firebase
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
-import { TasksComponent } from './components/tasks/tasks.component';
+import { TasksComponent, DialogDetails } from './components/tasks/tasks.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +38,11 @@ import { TasksComponent } from './components/tasks/tasks.component';
     MenuComponent,
     NavbarComponent,
     HomeComponent,
-    TasksComponent
+    TasksComponent,
+    DialogDetails
+  ],
+  entryComponents: [
+    DialogDetails
   ],
   imports: [
     BrowserModule,

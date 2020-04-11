@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, MatSnackBar } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatTableDataSource, MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Database } from 'src/app/database.service';
 
@@ -56,7 +56,8 @@ export class TasksComponent implements OnInit {
 
   constructor(
     private db: Database,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {
   }
 
@@ -72,6 +73,18 @@ export class TasksComponent implements OnInit {
       deadline: new FormControl(new Date()),
       description: new FormControl(''),
       priority: new FormControl(false)
+    });
+  }
+
+  openDialog(element): void {
+    const dialogRef = this.dialog.open(DialogDetails, {
+      width: '450px',
+      data: {selectedElement: element}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      //console.log(new FormControl(element.deadline.toDate()));
+      //this.animal = result;
     });
   }
 
@@ -104,6 +117,24 @@ export class TasksComponent implements OnInit {
     } else {
       this.selectedElement = element;
     }
+  }
+
+}
+
+@Component({
+  selector: 'dialog-details',
+  templateUrl: './dialog-details.html',
+  styleUrls: ['./dialog-details.scss']
+})
+
+export class DialogDetails {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogDetails>,
+    @Inject(MAT_DIALOG_DATA) public data: TaskElement) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

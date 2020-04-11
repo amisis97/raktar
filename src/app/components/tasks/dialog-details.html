@@ -1,0 +1,22 @@
+<div *ngIf="data.selectedElement" class="selected-elem">
+  <h2>{{data.selectedElement.name}}</h2>
+  <form class="edit-form">
+    <div class="first-row">
+      <mat-form-field>
+        <mat-label>Cím</mat-label>
+        <input matInput placeholder="{{data.selectedElement.name}}" value="{{data.selectedElement.name}}">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Határidő</mat-label>
+        <input matInput [matDatepicker]="picker" [value]="data.selectedElement.deadline.toDate()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <mat-form-field class="description">
+      <mat-label>Megjegyzés</mat-label>
+      <textarea  name="description" matInput value="{{data.selectedElement.description}}" placeholder="{{data.selectedElement.description}}"></textarea>
+    </mat-form-field>
+    <button mat-flat-button color="primary">Módosítás</button>
+  </form>
+</div>

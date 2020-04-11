@@ -1,4 +1,6 @@
 <h2 class="title">{{title}}</h2>
+
+<!-- Táblázat -->
 <mat-form-field>
   <mat-label>Kereső</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="keresés...">
@@ -30,7 +32,7 @@
   </ng-container>
   <ng-container matColumnDef="details">
     <th class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
-    <td class="align-right" (click)="selectRow(element)" mat-cell *matCellDef="let element">
+    <td class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
       <i class="material-icons">reorder</i>
     </td>
   </ng-container>
@@ -43,23 +45,9 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-<div *ngIf="selectedElement" class="selected-elem">
-  <h2>{{selectedElement.name}}</h2>
-  <form class="example-form">
-    <mat-form-field class="example-full-width">
-      <mat-label>Cím</mat-label>
-      <input matInput placeholder="{{selectedElement.name}}" value="{{selectedElement.name}}">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Choose a date</mat-label>
-      <input matInput [matDatepicker]="picker">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    <button mat-flat-button color="primary">Módosítás</button>
-  </form>
-</div>
 
+
+<!-- Új feljegyzés -->
 <mat-expansion-panel class="add-new-task">
   <mat-expansion-panel-header>Új feladat hozzáadása</mat-expansion-panel-header>
   <form [formGroup]="taskForm" autocomplete="off" novalidate (ngSubmit)="createTask(taskForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
