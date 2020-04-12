@@ -2,7 +2,9 @@
   width: 100%;
 }
 .edit-form .first-row {
-  display:grid;
-  display: -ms-grid;
-  grid-template-columns: 50% 50%;
+  display:flex;
+  max-width: 100%;
+}
+.edit-form .first-row .name {
+  margin-right: 15px;
 }

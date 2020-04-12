@@ -19,12 +19,26 @@ $border-bottom: 1px solid #ccc;
 }
 #menu .menu-item {
   height: 60px;
-  font-size: 18px;
+  font-size: 16px;
+  padding: 0px 15px;
   border-bottom: $border-bottom;
-  display: flex;
-  align-items: center;
+  transition: background-color .3s ease-in-out;
 }
 #menu .menu-item:hover {
+  transition: background-color .3s ease-in-out;
   background-color: #273238;
+}
+#menu .menu-item a,
+#menu .menu-item a:hover,
+#menu .menu-item a:active,
+#menu .menu-item a:focus {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  height: 100%;
+  text-decoration: unset;
+}
+#menu .menu-item i {
+  margin-right: 10px;
 }
 

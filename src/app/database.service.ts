@@ -39,4 +39,9 @@ export class Database {
       const c = 'tasks/' + taskId;
       this.db.doc(c).delete();
     }
+
+    editTask(taskId, task) {
+      const c = 'tasks/' + taskId;
+      this.db.doc(c).set(task);
+    }
 }

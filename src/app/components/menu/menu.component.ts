@@ -26,9 +26,9 @@ export class MenuComponent implements OnInit {
 
   menuItems = [
     {
-      title: 'Menü1',
-      url: '/menu1',
-      icon: '/icon.png'
+      title: 'Kezdőlap',
+      url: '/home',
+      icon: 'home'
     },
     {
       title: 'Menü2',

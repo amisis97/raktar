@@ -1,21 +1,23 @@
-<div *ngIf="data.selectedElement" class="selected-elem">
-  <h2>{{data.selectedElement.name}}</h2>
-  <form class="edit-form">
+<div *ngIf="this.data" class="selected-elem">
+  <h2>{{data.name}}</h2>
+  <form class="edit-form" [formGroup]="taskEditForm" autocomplete="off" novalidate (ngSubmit)="editTask(taskEditForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
     <div class="first-row">
-      <mat-form-field>
+      <mat-form-field class="name">
         <mat-label>Cím</mat-label>
-        <input matInput placeholder="{{data.selectedElement.name}}" value="{{data.selectedElement.name}}">
+        <input matInput formControlName="name">
+        <mat-error *ngIf="hasError('name', 'required')">Cím megadása kötelező</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Határidő</mat-label>
-        <input matInput [matDatepicker]="picker" [value]="data.selectedElement.deadline.toDate()">
+        <input matInput [matDatepicker]="picker" formControlName="deadline">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-error *ngIf="hasError('deadline', 'required')">Határidő megadása kötelező</mat-error>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
     </div>
     <mat-form-field class="description">
       <mat-label>Megjegyzés</mat-label>
-      <textarea  name="description" matInput value="{{data.selectedElement.description}}" placeholder="{{data.selectedElement.description}}"></textarea>
+      <textarea name="description" matInput formControlName="description"></textarea>
     </mat-form-field>
     <button mat-flat-button color="primary">Módosítás</button>
   </form>

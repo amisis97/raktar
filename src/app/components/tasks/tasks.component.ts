@@ -2,12 +2,14 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatTableDataSource, MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Database } from 'src/app/database.service';
+import { firestore } from 'firebase';
+import { sameDay } from '../../app.component';
 
 export interface TaskElement {
   name: string;
   description: string;
-  created: Date;
-  deadline: Date;
+  created: firestore.Timestamp;
+  deadline: firestore.Timestamp;
   priority: boolean;
   done: boolean;
   taskId: string;
@@ -51,6 +53,7 @@ export class TasksComponent implements OnInit {
   title = 'Feladatok / Teendők / Jegyzetek lista';
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
+  panelOpenState = false;
 
 
 
@@ -63,7 +66,6 @@ export class TasksComponent implements OnInit {
 
   ngOnInit() {
     this.db.getTasks().subscribe(tasks => {
-      console.log(tasks);
       this.elements = tasks as TaskElement[];
       this.dataSource = new MatTableDataSource(this.elements);
     });
@@ -76,15 +78,10 @@ export class TasksComponent implements OnInit {
     });
   }
 
-  openDialog(element): void {
+  openDialog(element: TaskElement): void {
     const dialogRef = this.dialog.open(DialogDetails, {
       width: '450px',
-      data: {selectedElement: element}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      //console.log(new FormControl(element.deadline.toDate()));
-      //this.animal = result;
+      data: element
     });
   }
 
@@ -98,10 +95,26 @@ export class TasksComponent implements OnInit {
     this.taskForm.reset();
   }
 
-  deleteTask(taskId) {
+  deleteTask(taskId: string) {
     this.selectedElement = null;
     this.db.deleteTask(taskId);
     this.snackBar.open('Sikeres törlés!', null, {
+      duration: 2000,
+    });
+  }
+
+  doneTask(element: TaskElement, check: boolean) {
+    element.done = check;
+    this.db.editTask(element.taskId, element);
+    this.snackBar.open('Sikeres módosítás!', null, {
+      duration: 2000,
+    });
+  }
+
+  priorityTask(element: TaskElement, check: boolean) {
+    element.priority = check;
+    this.db.editTask(element.taskId, element);
+    this.snackBar.open('Sikeres módosítás!', null, {
       duration: 2000,
     });
   }
@@ -111,12 +124,19 @@ export class TasksComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  selectRow(element) {
+  selectRow(element: TaskElement) {
+    this.panelOpenState = false;
     if (element === this.selectedElement) {
       this.selectedElement = null;
     } else {
       this.selectedElement = element;
     }
+  }
+
+  isExpired(element: TaskElement) {
+    const d1 = element.deadline.toDate();
+    const d2 = new Date();
+    return d1 < d2 && !sameDay(d1, d2);
   }
 
 }
@@ -129,12 +149,37 @@ export class TasksComponent implements OnInit {
 
 export class DialogDetails {
 
+  public taskEditForm: FormGroup;
+
   constructor(
     public dialogRef: MatDialogRef<DialogDetails>,
+    private db: Database,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: TaskElement) {}
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  ngOnInit() {
+    this.taskEditForm = new FormGroup({
+      name: new FormControl(this.data.name, [Validators.required, Validators.maxLength(60)]),
+      deadline: new FormControl(this.data.deadline.toDate(), [Validators.required]),
+      description: new FormControl(this.data.description),
+    });
+  }
+
+  public hasError = (controlName: string, errorName: string) =>{
+    return this.taskEditForm.controls[controlName].hasError(errorName);
+  }
+
+  public editTask = (taskFormValue: any) => {
+    const overWriteValues = {...this.data, ...taskFormValue};
+    this.db.editTask(this.data.taskId, overWriteValues);
+    this.dialogRef.close();
+    this.snackBar.open('Sikeres módosítás!', null, {
+      duration: 2000,
+    });
   }
 
 }

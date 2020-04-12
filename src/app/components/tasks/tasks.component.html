@@ -8,26 +8,32 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 task-table">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Cím</th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <td mat-cell *matCellDef="let element">
+      <div [ngClass]="{'over': !element.done && isExpired(element), 'priority': element.priority}" *ngIf="element.name">{{element.name}}</div>
+    </td>
   </ng-container>
   <ng-container matColumnDef="created">
     <th mat-header-cell *matHeaderCellDef>Létrehozva</th>
-    <td mat-cell *matCellDef="let element"> {{element.created.toDate().toDateString()}} </td>
+    <td mat-cell *matCellDef="let element">
+      <div *ngIf="element.created">{{element.created.toDate().toDateString()}}</div>
+    </td>
   </ng-container>
   <ng-container matColumnDef="deadline">
     <th mat-header-cell *matHeaderCellDef>Határidő</th>
-    <td mat-cell *matCellDef="let element"> {{element.deadline.toDate().toDateString()}} </td>
+    <td mat-cell *matCellDef="let element">
+      <div *ngIf="element.deadline">{{element.deadline.toDate().toDateString()}}</div>
+    </td>
   </ng-container>
   <ng-container matColumnDef="priority">
     <th mat-header-cell *matHeaderCellDef>Fontos</th>
     <td mat-cell *matCellDef="let element">
-      <mat-checkbox [(ngModel)]="element.priority"></mat-checkbox>
+      <mat-checkbox #priority (change)="priorityTask(element, priority.checked)" *ngIf="element.priority != null" [(ngModel)]="element.priority"></mat-checkbox>
     </td>
   </ng-container>
   <ng-container matColumnDef="done">
     <th mat-header-cell *matHeaderCellDef>Kész</th>
     <td mat-cell *matCellDef="let element">
-      <mat-checkbox [(ngModel)]="element.done"></mat-checkbox>
+      <mat-checkbox #done (change)="doneTask(element, done.checked)" [(ngModel)]="element.done"></mat-checkbox>
     </td>
   </ng-container>
   <ng-container matColumnDef="details">
@@ -50,7 +56,8 @@
 <!-- Új feljegyzés -->
 <mat-expansion-panel class="add-new-task">
   <mat-expansion-panel-header>Új feladat hozzáadása</mat-expansion-panel-header>
-  <form [formGroup]="taskForm" autocomplete="off" novalidate (ngSubmit)="createTask(taskForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+  <form [formGroup]="taskForm" autocomplete="off" novalidate (ngSubmit)="createTask(taskForm.value)"
+    fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
     <mat-form-field>
       <mat-label>Cím</mat-label>
       <input formControlName="name" name="name" matInput placeholder="" value="">
