@@ -16,7 +16,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .panel {
   padding: 15px;
   background-color: $panelBgColor;
-  height: 100%;
+  height: calc(100% - 30px);
   color: $panelTextColor;
 }
 .panel h1 {

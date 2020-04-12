@@ -4,16 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Database } from 'src/app/database.service';
 import { firestore } from 'firebase';
 import { sameDay } from '../../app.component';
-
-export interface TaskElement {
-  name: string;
-  description: string;
-  created: firestore.Timestamp;
-  deadline: firestore.Timestamp;
-  priority: boolean;
-  done: boolean;
-  taskId: string;
-}
+import { TaskElement } from 'src/app/interfaces/TaskElement';
 
 @Component({
   selector: 'app-tasks',
@@ -24,36 +15,10 @@ export interface TaskElement {
 export class TasksComponent implements OnInit {
   public taskForm: FormGroup;
   displayedColumns: string[] = ['name', 'created', 'deadline', 'priority', 'done', 'details', 'delete'];
-  elements: TaskElement[] = [
-    /*{
-      name: 'Task1',
-      description: 'Ez egy nagyon fontos feladat',
-      created: '2020-03-20',
-      deadline: '2020-04-01',
-      priority: true,
-      done: false
-    },
-    {
-      name: 'Task2',
-      description: 'Ez egy másik feladat',
-      created: '2020-02-21',
-      deadline: '2020-03-01',
-      priority: false,
-      done: false
-    },
-    {
-      name: 'Task3',
-      description: 'Ez egy sokadik feladat',
-      created: '2020-01-20',
-      deadline: '2020-03-28',
-      priority: false,
-      done: true
-    }*/
-  ];
+  elements: TaskElement[] = [];
   title = 'Feladatok / Teendők / Jegyzetek lista';
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
-  panelOpenState = false;
 
 
 
@@ -125,7 +90,6 @@ export class TasksComponent implements OnInit {
   }
 
   selectRow(element: TaskElement) {
-    this.panelOpenState = false;
     if (element === this.selectedElement) {
       this.selectedElement = null;
     } else {

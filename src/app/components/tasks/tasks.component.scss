@@ -29,4 +29,8 @@
 .task-table .over.priority:after {
   content: ('(!!)');
 }
+.task-table-container {
+  max-height: 500px;
+  overflow: auto;
+}
 

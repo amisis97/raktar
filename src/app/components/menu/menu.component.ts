@@ -31,9 +31,14 @@ export class MenuComponent implements OnInit {
       icon: 'home'
     },
     {
-      title: 'Menü2',
-      url: '/menu2',
-      icon: '/icon2.png'
+      title: 'Raktár',
+      url: '/raktar',
+      icon: 'domain'
+    },
+    {
+      title: 'Bevételezés',
+      url: '/products',
+      icon: 'add_box'
     }
   ];
 

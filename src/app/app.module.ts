@@ -30,6 +30,9 @@ import { Database } from './database.service';
 // Firebase
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
 import { TasksComponent, DialogDetails } from './components/tasks/tasks.component';
+import { PartnersComponent } from './components/partners/partners.component';
+import { WarehouseComponent } from './components/warehouse/warehouse.component';
+import { WarehousePageComponent } from './pages/warehouse-page/warehouse-page.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,10 @@ import { TasksComponent, DialogDetails } from './components/tasks/tasks.componen
     NavbarComponent,
     HomeComponent,
     TasksComponent,
-    DialogDetails
+    DialogDetails,
+    PartnersComponent,
+    WarehouseComponent,
+    WarehousePageComponent
   ],
   entryComponents: [
     DialogDetails

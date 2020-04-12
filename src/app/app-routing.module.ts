@@ -4,11 +4,13 @@ import { LoginComponent } from './auth/login/login.component';
 import { LoginGuardSerive } from './auth/login-guard.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
+import { WarehousePageComponent } from './pages/warehouse-page/warehouse-page.component';
 
 
 const routes: Routes = [
   // { path: '', component: LoginComponent },
   { path: '', component: HomeComponent, canActivate: [LoginGuardSerive] },
+  { path: 'raktar', component: WarehousePageComponent, canActivate: [LoginGuardSerive] },
   { path: 'home', component: HomeComponent, canActivate: [LoginGuardSerive] },
   { path: 'login', component: LoginComponent },
   { path: '**', component: HomeComponent, canActivate: [LoginGuardSerive] },
