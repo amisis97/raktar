@@ -33,6 +33,7 @@ import { TasksComponent, DialogDetails } from './components/tasks/tasks.componen
 import { PartnersComponent } from './components/partners/partners.component';
 import { WarehouseComponent } from './components/warehouse/warehouse.component';
 import { WarehousePageComponent } from './pages/warehouse-page/warehouse-page.component';
+import { PartnersPageComponent } from './pages/partners-page/partners-page.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { WarehousePageComponent } from './pages/warehouse-page/warehouse-page.co
     DialogDetails,
     PartnersComponent,
     WarehouseComponent,
-    WarehousePageComponent
+    WarehousePageComponent,
+    PartnersPageComponent
   ],
   entryComponents: [
     DialogDetails

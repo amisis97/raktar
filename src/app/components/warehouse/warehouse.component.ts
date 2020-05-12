@@ -50,7 +50,9 @@ export class WarehouseComponent implements OnInit {
 
   deleteTask(areaId: string) {
     this.db.getProducts().subscribe(products => {
-      let p = products.find(obj  => obj.area === areaId);
+      // let p = products.find(obj  => obj.area === areaId);
+      // Tipus hiba van
+      let p = null;
       if(p) {
         this.snackBar.open('Törlés sikertelen, előbb törölni kell a termékeket!', null, {
           duration: 4000,

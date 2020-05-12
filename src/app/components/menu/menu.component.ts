@@ -31,6 +31,11 @@ export class MenuComponent implements OnInit {
       icon: 'home'
     },
     {
+      title: 'Partnerek',
+      url: '/partners',
+      icon: 'supervised_user_circle'
+    },
+    {
       title: 'Raktár',
       url: '/raktar',
       icon: 'domain'

@@ -62,4 +62,8 @@ export class Database {
     getProducts() {
       return this.db.collection('products').valueChanges({idField: 'pID', });
     }
+
+    getPartners() {
+      return this.db.collection('partners').valueChanges({idField: 'pID', });
+    }
 }
