@@ -34,6 +34,15 @@ import { PartnersComponent } from './components/partners/partners.component';
 import { WarehouseComponent } from './components/warehouse/warehouse.component';
 import { WarehousePageComponent } from './pages/warehouse-page/warehouse-page.component';
 import { PartnersPageComponent } from './pages/partners-page/partners-page.component';
+import { ProductsPageComponent } from './pages/products-page/products-page.component';
+import { ProductsComponent } from './components/products/products.component';
+import { WorkersPageComponent } from './pages/workers-page/workers-page.component';
+import { WorkersComponent } from './components/workers/workers.component';
+import { StatPageComponent } from './pages/stat-page/stat-page.component';
+import { BuyStatComponent } from './components/buy-stat/buy-stat.component';
+import { SellStatComponent } from './components/sell-stat/sell-stat.component';
+import { ReceiptsPageComponent } from './pages/receipts-page/receipts-page.component';
+import { ReceiptsComponent } from './components/receipts/receipts.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +56,16 @@ import { PartnersPageComponent } from './pages/partners-page/partners-page.compo
     PartnersComponent,
     WarehouseComponent,
     WarehousePageComponent,
-    PartnersPageComponent
+    PartnersPageComponent,
+    ProductsPageComponent,
+    ProductsComponent,
+    WorkersPageComponent,
+    WorkersComponent,
+    StatPageComponent,
+    BuyStatComponent,
+    SellStatComponent,
+    ReceiptsPageComponent,
+    ReceiptsComponent
   ],
   entryComponents: [
     DialogDetails

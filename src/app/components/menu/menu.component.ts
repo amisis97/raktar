@@ -41,10 +41,25 @@ export class MenuComponent implements OnInit {
       icon: 'domain'
     },
     {
-      title: 'Bevételezés',
+      title: 'Termékek',
       url: '/products',
+      icon: 'category'
+    },
+    {
+      title: 'Bevételezés',
+      url: '/receipts',
       icon: 'add_box'
-    }
+    },
+    {
+      title: 'Raktárosok',
+      url: '/workers',
+      icon: 'transfer_within_a_station'
+    },
+    {
+      title: 'Statisztika',
+      url: '/stat',
+      icon: 'equalizer'
+    },
   ];
 
   ngOnInit() {

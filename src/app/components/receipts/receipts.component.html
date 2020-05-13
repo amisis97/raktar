@@ -5,47 +5,53 @@
   <input matInput (keyup)="applyFilter($event)" placeholder="keresés...">
 </mat-form-field>
 <div class="warehouse-table-container mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" class="partners-table">
+  <table mat-table [dataSource]="dataSource" class="receipts-table">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Név</th>
       <td mat-cell *matCellDef="let element">
         <div *ngIf="element.name">{{element.name}}</div>
       </td>
     </ng-container>
-    <ng-container matColumnDef="country">
-      <th mat-header-cell *matHeaderCellDef>Ország</th>
+    <ng-container matColumnDef="area">
+      <th mat-header-cell *matHeaderCellDef>Raktár</th>
       <td mat-cell *matCellDef="let element">
-        <div *ngIf="element.country">{{element.country}}</div>
+        <div *ngIf="element.area"><a [routerLink]="['/raktar']">{{element.area}}</a></div>
       </td>
     </ng-container>
-    <ng-container matColumnDef="address">
-      <th mat-header-cell *matHeaderCellDef>Cím</th>
+    <ng-container matColumnDef="productNr">
+      <th mat-header-cell *matHeaderCellDef>Cikkszám</th>
       <td mat-cell *matCellDef="let element">
-        <div *ngIf="element.city">{{element.city}}, {{element.address}}</div>
+        <div *ngIf="element.productNr">{{element.productNr}}</div>
       </td>
     </ng-container>
-    <ng-container matColumnDef="customer">
-      <th mat-header-cell *matHeaderCellDef>Vásárló</th>
+    <ng-container matColumnDef="stock">
+      <th mat-header-cell *matHeaderCellDef>Mennyiség</th>
       <td mat-cell *matCellDef="let element">
-        <mat-checkbox #priority *ngIf="element.customer != null" [(ngModel)]="element.customer"></mat-checkbox>
+        <div *ngIf="element.stock">{{element.stock}}</div>
       </td>
     </ng-container>
-    <ng-container matColumnDef="suppliers">
+    <ng-container matColumnDef="unit">
+      <th mat-header-cell *matHeaderCellDef>Mértékegység</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.unit">{{element.unit}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="purchasePrice">
+      <th mat-header-cell *matHeaderCellDef>Beszállítói ár</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.purchasePrice">{{element.purchasePrice}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Eladási ár</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.price">{{element.price}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="supplier">
       <th mat-header-cell *matHeaderCellDef>Beszállító</th>
       <td mat-cell *matCellDef="let element">
-        <mat-checkbox #priority *ngIf="element.suppliers != null" [(ngModel)]="element.suppliers"></mat-checkbox>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="details">
-      <th class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
-      <td class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
-        <i class="material-icons">reorder</i>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="delete">
-      <th class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
-      <td class="align-right" mat-cell *matCellDef="let element">
-        <i (click)="deletePartner(element.pID)" class="material-icons">delete</i>
+        <div *ngIf="element.supplier">{{element.supplier}}</div>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -53,7 +59,7 @@
   </table>
 </div>
 
-<!-- Új terület -->
+<!-- Új terület
 <mat-expansion-panel class="add-new-area">
   <mat-expansion-panel-header>Új partner hozzáadása</mat-expansion-panel-header>
   <form [formGroup]="whForm" autocomplete="off" novalidate (ngSubmit)="createTask(whForm.value)"
@@ -84,4 +90,4 @@
     </div>
     <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>
   </form>
-</mat-expansion-panel>
+</mat-expansion-panel>-->

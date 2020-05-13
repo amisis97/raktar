@@ -1,5 +1,5 @@
 export interface Product {
-  pId: string;
+  pID: string;
   area: string;
   productNr: string;
   name: string;
@@ -7,5 +7,5 @@ export interface Product {
   purchasePrice: number;
   price: number;
   unit: string;
-  brand: string;
+  supplier: string;
 }

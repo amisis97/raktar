@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Partner } from 'src/app/interfaces/Partner';
+import { Product } from 'src/app/interfaces/Product';
 import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { Database } from 'src/app/database.service';
+import { Area } from 'src/app/interfaces/Area';
+import { Partner } from 'src/app/interfaces/Partner';
 
 @Component({
-  selector: 'app-partners',
-  templateUrl: './partners.component.html',
-  styleUrls: ['./partners.component.scss', '../warehouse/warehouse.component.scss']
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.scss']
 })
-export class PartnersComponent implements OnInit {
+export class ProductsComponent implements OnInit {
 
   title = 'Vásárlók és beszállítók adatai';
   public whForm: FormGroup;
-  displayedColumns: string[] = ['name', 'country', 'address', 'customer', 'suppliers'];
-  elements: Partner[] = [];
+  displayedColumns: string[] = ['name', 'area', 'productNr', 'stock', 'unit', 'purchasePrice', 'price', 'supplier'];
+  elements: Product[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
 
@@ -25,8 +27,22 @@ export class PartnersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.db.getPartners().subscribe(partners => {
-      this.elements = partners as Partner[];
+    this.db.getProducts().subscribe(products => {
+      this.elements = products as Product[];
+      this.elements.forEach(e => {
+        const areaKey = e.area;
+        const suppKey = e.supplier;
+        e.area = null;
+        e.supplier = null;
+        this.db.getArea(areaKey).subscribe(area => {
+          const temp = area as Area;
+          e.area = temp.name;
+        });
+        this.db.getPartner(suppKey).subscribe(partner => {
+          const temp = partner as Partner;
+          e.supplier = temp.name;
+        });
+      });
       this.dataSource = new MatTableDataSource(this.elements);
     });
 
@@ -45,11 +61,11 @@ export class PartnersComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openDialog(element: Partner): void {
+  openDialog(element: Product): void {
     console.log('not work');
   }
 
-  deletePartner(partnerId: string) {
+  deleteProduct(productId: string) {
     this.db.getProducts().subscribe(products => {
       // let p = products.find(obj  => obj.partner === partnerId);
       // Tipus hiba van
@@ -66,15 +82,15 @@ export class PartnersComponent implements OnInit {
     });
   }
 
-  editPartner(partnerId: string) {
-
-  }
-
   hasError = (controlName: string, errorName: string) => {
     return this.whForm.controls[controlName].hasError(errorName);
   }
 
-  createPartner = (whFormValue) => {
+  editProduct(productId: string) {
+
+  }
+
+  createProduct = (whFormValue) => {
     this.db.addArea(whFormValue);
     this.whForm.reset();
   }

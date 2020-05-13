@@ -69,7 +69,11 @@ export class WarehouseComponent implements OnInit {
     return this.whForm.controls[controlName].hasError(errorName);
   }
 
-  createTask = (whFormValue) => {
+  editArea(areaId: string) {
+
+  }
+
+  createTask = (whFormValue: Area) => {
     this.db.addArea(whFormValue);
     this.whForm.reset();
   }
