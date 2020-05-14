@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Product } from 'src/app/interfaces/Product';
-import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import { Area } from 'src/app/interfaces/Area';
 import { Partner } from 'src/app/interfaces/Partner';
+import { firestore } from 'firebase';
+import { Buy } from 'src/app/interfaces/Buy';
 
 @Component({
   selector: 'app-products',
@@ -15,10 +17,14 @@ export class ProductsComponent implements OnInit {
 
   title = 'Vásárlók és beszállítók adatai';
   public whForm: FormGroup;
-  displayedColumns: string[] = ['name', 'area', 'productNr', 'stock', 'unit', 'purchasePrice', 'price', 'supplier'];
+  displayedColumns: string[] = ['name', 'area', 'productNr', 'stock', 'unit', 'purchasePrice', 'price', 'supplier', 'details', 'delete'];
   elements: Product[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
+  selectedSupplier: string;
+  selectedArea: string;
+  suppliers: Partner[] = [];
+  areas: Area[] = [];
 
   constructor(
     private db: Database,
@@ -45,14 +51,26 @@ export class ProductsComponent implements OnInit {
       });
       this.dataSource = new MatTableDataSource(this.elements);
     });
+    this.db.getPartners().subscribe(partners => {
+      this.suppliers = partners as Partner[];
+      this.suppliers = this.suppliers.filter(supplier => supplier.suppliers);
+      this.selectedSupplier = this.suppliers[0].pID;
+    });
+    this.db.getAreas().subscribe(areas => {
+      this.areas = areas as Area[];
+      this.selectedArea = this.areas[0].areaId;
+    });
+
 
     this.whForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      country: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      city: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      address: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      customer: new FormControl(''),
-      suppliers: new FormControl('')
+      name: new FormControl('', [Validators.required, Validators.minLength(1)]),
+      area: new FormControl('', [Validators.required]),
+      productNr: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      stock: new FormControl('', [Validators.required, Validators.minLength(1)]),
+      unit: new FormControl('', [Validators.required, Validators.minLength(1)]),
+      purchasePrice: new FormControl('', [Validators.required, Validators.minLength(1)]),
+      price: new FormControl('', [Validators.required, Validators.minLength(1)]),
+      supplier: new FormControl('', [Validators.required]),
     });
   }
 
@@ -62,23 +80,16 @@ export class ProductsComponent implements OnInit {
   }
 
   openDialog(element: Product): void {
-    console.log('not work');
+    const dialogRef = this.dialog.open(ProductDialogDetails, {
+      width: '450px',
+      data: element
+    });
   }
 
   deleteProduct(productId: string) {
-    this.db.getProducts().subscribe(products => {
-      // let p = products.find(obj  => obj.partner === partnerId);
-      // Tipus hiba van
-      let p = null;
-      if(p) {
-        this.snackBar.open('Törlés sikertelen, előbb törölni kell a termékeket!', null, {
-          duration: 4000,
-        });
-      } else {
-        this.snackBar.open('Sikeres törlés!', null, {
-          duration: 2000,
-        });
-      }
+    this.db.deleteProduct(productId);
+    this.snackBar.open('Sikeres törlés!', null, {
+      duration: 2000,
     });
   }
 
@@ -86,13 +97,87 @@ export class ProductsComponent implements OnInit {
     return this.whForm.controls[controlName].hasError(errorName);
   }
 
-  editProduct(productId: string) {
-
+  editProduct(product: Product) {
+    console.log(product);
   }
 
-  createProduct = (whFormValue) => {
-    this.db.addArea(whFormValue);
-    this.whForm.reset();
+  createProduct = (whFormValue: Product) => {
+    this.db.addProduct(whFormValue).then(docRef => {
+      const buy = {
+        date: firestore.Timestamp.now(),
+        products: [docRef.id, whFormValue.stock],
+        seller: whFormValue.supplier
+      };
+      this.db.addReceipt(buy as Buy);
+      this.whForm.reset();
+    });
   }
-
 }
+
+
+@Component({
+  selector: 'dialog-details',
+  templateUrl: './dialog-details.html',
+  styleUrls: ['./dialog-details.scss']
+})
+
+export class ProductDialogDetails {
+
+  constructor(
+    public dialogRef: MatDialogRef<ProductDialogDetails>,
+    private db: Database,
+    private snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: Product) { }
+
+  public productEditForm: FormGroup;
+  countries: string[] = [];
+  selectedSupplier: string;
+  selectedArea: string;
+  suppliers: Partner[] = [];
+  areas: Area[] = [];
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  ngOnInit() {
+    this.db.getPartners().subscribe(partners => {
+      this.suppliers = partners as Partner[];
+      this.suppliers = this.suppliers.filter(supplier => supplier.suppliers);
+      this.selectedSupplier = this.suppliers[0].pID;
+    });
+    this.db.getAreas().subscribe(areas => {
+      this.areas = areas as Area[];
+      this.selectedArea = this.areas[0].areaId;
+    });
+
+
+
+    this.productEditForm = new FormGroup({
+      name: new FormControl(this.data.name, [Validators.required, Validators.minLength(1)]),
+      area: new FormControl(this.data.area, [Validators.required]),
+      productNr: new FormControl(this.data.productNr, [Validators.required, Validators.minLength(2)]),
+      stock: new FormControl(this.data.stock, [Validators.required, Validators.minLength(1)]),
+      unit: new FormControl(this.data.unit, [Validators.required, Validators.minLength(1)]),
+      purchasePrice: new FormControl(this.data.purchasePrice, [Validators.required, Validators.minLength(1)]),
+      price: new FormControl(this.data.price, [Validators.required, Validators.minLength(1)]),
+      supplier: new FormControl(this.data.supplier, [Validators.required]),
+    });
+
+  }
+
+  public hasError = (controlName: string, errorName: string) => {
+    return this.productEditForm.controls[controlName].hasError(errorName);
+  }
+
+  public editProduct = (productFormValue: any) => {
+    const overWriteValues = { ...this.data, ...productFormValue };
+    console.log(productFormValue);
+    /*this.db.editProduct(this.data.pID, overWriteValues);
+    this.dialogRef.close();
+    this.snackBar.open('Sikeres módosítás!', null, {
+      duration: 2000,
+    });*/
+  }
+}
+

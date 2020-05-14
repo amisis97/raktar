@@ -35,7 +35,7 @@ import { WarehouseComponent } from './components/warehouse/warehouse.component';
 import { WarehousePageComponent } from './pages/warehouse-page/warehouse-page.component';
 import { PartnersPageComponent } from './pages/partners-page/partners-page.component';
 import { ProductsPageComponent } from './pages/products-page/products-page.component';
-import { ProductsComponent } from './components/products/products.component';
+import { ProductsComponent, ProductDialogDetails } from './components/products/products.component';
 import { WorkersPageComponent } from './pages/workers-page/workers-page.component';
 import { WorkersComponent } from './components/workers/workers.component';
 import { StatPageComponent } from './pages/stat-page/stat-page.component';
@@ -54,6 +54,7 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
     TasksComponent,
     DialogDetails,
     PartnerDialogDetails,
+    ProductDialogDetails,
     PartnersComponent,
     WarehouseComponent,
     WarehousePageComponent,
@@ -70,7 +71,8 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
   ],
   entryComponents: [
     DialogDetails,
-    PartnerDialogDetails
+    PartnerDialogDetails,
+    ProductDialogDetails
   ],
   imports: [
     BrowserModule,

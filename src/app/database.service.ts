@@ -10,6 +10,7 @@ import { Product } from './interfaces/Product';
 import { Partner } from './interfaces/Partner';
 import { Area } from './interfaces/Area';
 import { Sell } from './interfaces/Sell';
+import { Buy } from './interfaces/Buy';
 
 @Injectable({
   providedIn: 'root'
@@ -84,12 +85,16 @@ export class Database {
       return this.db.doc(c).valueChanges();
     }
 
+    addProduct(product: Product) {
+      return this.db.collection('products').add(product);
+    }
+
     deleteProduct(pId: string) {
       const c = 'products/' + pId;
       this.db.doc(c).delete();
     }
 
-    editProduct(pId: string) {
+    editProduct(pId: string, product: Product) {
 
     }
 
@@ -148,8 +153,8 @@ export class Database {
       return this.db.doc(c).valueChanges();
     }
 
-    addReceipt(r: Sell) {
-      this.db.collection('receipts').add(r);
+    addReceipt(b: Buy) {
+      this.db.collection('buy').add(b);
     }
 
     // Statisztika

@@ -1,0 +1,50 @@
+<div *ngIf="this.data" class="selected-elem">
+  <h2>{{data.name}} {{data.productNr}}</h2>
+  <form class="edit-form" [formGroup]="productEditForm" autocomplete="off" novalidate (ngSubmit)="editProduct(productEditForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <mat-form-field>
+      <mat-label>Neve</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="hasError('name', 'required')">Név megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Raktár</mat-label>
+      <mat-select matSelect formControlName="area">
+        <mat-option value="{{a.areaId}}" *ngFor="let a of areas">{{a.shelf}}, ({{a.name}}, {{a.row}}|{{a.column}})</mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('area', 'required')">Raktár megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Cikkszám</mat-label>
+      <input matInput formControlName="productNr" name="productNr" matInput placeholder="" value="">
+      <mat-error *ngIf="hasError('productNr', 'required')">Cikkszám megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Mennyiség</mat-label>
+      <input matInput formControlName="stock" name="stock" type="number" matInput placeholder="" value="">
+      <mat-error *ngIf="hasError('stock', 'required')">Név megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Mértékegység</mat-label>
+      <input matInput formControlName="unit" name="unit" matInput placeholder="" value="">
+      <mat-error *ngIf="hasError('unit', 'required')">Név megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Beszállítói ár</mat-label>
+      <input matInput formControlName="purchasePrice" type="number" name="purchasePrice" matInput placeholder="" value="">
+      <mat-error *ngIf="hasError('purchasePrice', 'required')">Név megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Eladási ár</mat-label>
+      <input matInput formControlName="price" type="number" name="price" matInput placeholder="" value="">
+      <mat-error *ngIf="hasError('price', 'required')">Név megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Beszállító</mat-label>
+      <mat-select matSelect formControlName="supplier" placeholder="" [(value)]="selectedSupplier">
+        <mat-option value="{{s.pID}}" *ngFor="let s of suppliers">{{s.name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('supplier', 'required')">Raktár megadása kötelező</mat-error>
+    </mat-form-field>
+    <button mat-flat-button color="primary">Módosítás</button>
+  </form>
+</div>

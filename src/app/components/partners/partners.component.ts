@@ -4,6 +4,7 @@ import { Partner } from 'src/app/interfaces/Partner';
 import { MatTableDataSource, MatSnackBar, MatDialog, MatSelect, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import countriesData from './countries.json';
+import { Product } from 'src/app/interfaces/Product';
 
 @Component({
   selector: 'app-partners',
@@ -14,7 +15,7 @@ export class PartnersComponent implements OnInit {
 
   title = 'Vásárlók és beszállítók adatai';
   public whForm: FormGroup;
-  displayedColumns: string[] = ['name', 'country', 'address', 'customer', 'suppliers', 'details'];
+  displayedColumns: string[] = ['name', 'country', 'address', 'customer', 'suppliers', 'details', 'delete'];
   elements: Partner[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
@@ -69,25 +70,35 @@ export class PartnersComponent implements OnInit {
     }
   }
 
-  deletePartner(partnerId: string) {
+  deletePartner(partner: Partner) {
+    let error = false;
     this.db.getProducts().subscribe(products => {
-      // let p = products.find(obj  => obj.partner === partnerId);
-      // Tipus hiba van
-      let p = null;
-      if(p) {
-        this.snackBar.open('Törlés sikertelen, előbb törölni kell a termékeket!', null, {
-          duration: 4000,
-        });
-      } else {
+      products = products as Product[];
+      products.forEach(p => {
+        const temp = p as Product;
+        if (temp.supplier === partner.pID) {
+
+          error = true;
+        }
+      });
+      if (!error) {
+        this.db.deletePartner(partner.pID);
         this.snackBar.open('Sikeres törlés!', null, {
           duration: 2000,
+        });
+      } else {
+        this.snackBar.open('Törlés sikertelen, előbb törölni kell a partnerhez tartozó termékeket!', null, {
+          duration: 4000,
         });
       }
     });
   }
 
-  editPartner(partnerId: string) {
-
+  editPartner(partner: Partner) {
+    this.db.editPartner(partner.pID, partner);
+    this.snackBar.open('Sikeres módosítás!', null, {
+      duration: 2000,
+    });
   }
 
   hasError = (controlName: string, errorName: string) => {
@@ -120,7 +131,7 @@ export class PartnerDialogDetails {
     public dialogRef: MatDialogRef<PartnerDialogDetails>,
     private db: Database,
     private snackBar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: Partner) {}
+    @Inject(MAT_DIALOG_DATA) public data: Partner) { }
 
   public partnerEditForm: FormGroup;
   countries: string[] = [];
@@ -142,12 +153,12 @@ export class PartnerDialogDetails {
 
   }
 
-  public hasError = (controlName: string, errorName: string) =>{
+  public hasError = (controlName: string, errorName: string) => {
     return this.partnerEditForm.controls[controlName].hasError(errorName);
   }
 
   public editPartner = (partnerFormValue: any) => {
-    const overWriteValues = {...this.data, ...partnerFormValue};
+    const overWriteValues = { ...this.data, ...partnerFormValue };
     this.db.editPartner(this.data.pID, overWriteValues);
     this.dialogRef.close();
     this.snackBar.open('Sikeres módosítás!', null, {

@@ -27,13 +27,13 @@
     <ng-container matColumnDef="customer">
       <th mat-header-cell *matHeaderCellDef>Vásárló</th>
       <td mat-cell *matCellDef="let element">
-        <mat-checkbox #priority *ngIf="element.customer != null" [(ngModel)]="element.customer"></mat-checkbox>
+        <mat-checkbox #priority (change)="editPartner(element)" *ngIf="element.customer != null" [(ngModel)]="element.customer"></mat-checkbox>
       </td>
     </ng-container>
     <ng-container matColumnDef="suppliers">
       <th mat-header-cell *matHeaderCellDef>Beszállító</th>
       <td mat-cell *matCellDef="let element">
-        <mat-checkbox #priority *ngIf="element.suppliers != null" [(ngModel)]="element.suppliers"></mat-checkbox>
+        <mat-checkbox #priority (change)="editPartner(element)" *ngIf="element.suppliers != null" [(ngModel)]="element.suppliers"></mat-checkbox>
       </td>
     </ng-container>
     <ng-container matColumnDef="details">
@@ -45,7 +45,7 @@
     <ng-container matColumnDef="delete">
       <th class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
       <td class="align-right" mat-cell *matCellDef="let element">
-        <i (click)="deletePartner(element.pID)" class="material-icons">delete</i>
+        <i (click)="deletePartner(element)" class="material-icons">delete</i>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
