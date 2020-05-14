@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import { Area } from 'src/app/interfaces/Area';
-import { Product } from 'src/app/interfaces/Product';
 
 @Component({
   selector: 'app-workers',
@@ -48,7 +47,7 @@ export class WorkersComponent implements OnInit {
     console.log('not work');
   }
 
-  deleteTask(workerId: string) {
+  deleteWorker(workerId: string) {
     this.db.getWorkers().subscribe(products => {
       // let p = products.find(obj  => obj.warokers === workerId);
       // Tipus hiba van

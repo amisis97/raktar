@@ -21,10 +21,10 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher, MatNativeDateModule } from '@angular/material/core';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher, MatNativeDateModule, MatOption, MatOptionModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule, MatCardModule, MatDialogModule, MatInputModule,
-  MatTableModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule } from '@angular/material';
+  MatTableModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule, MatSelect, MatSelectModule } from '@angular/material';
 import { HomeComponent } from './pages/home/home.component';
 import { Database } from './database.service';
 // Firebase
@@ -93,7 +93,9 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
     MatDatepickerModule,
     MatNativeDateModule,
     MatExpansionModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSelectModule,
+    MatOptionModule
   ],
   providers: [
     AuthService,

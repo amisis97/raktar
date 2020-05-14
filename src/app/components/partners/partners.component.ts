@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Partner } from 'src/app/interfaces/Partner';
-import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSnackBar, MatDialog, MatSelect } from '@angular/material';
 import { Database } from 'src/app/database.service';
+import countriesData from './countries.json';
 
 @Component({
   selector: 'app-partners',
@@ -17,6 +18,8 @@ export class PartnersComponent implements OnInit {
   elements: Partner[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
+  selectedCountry = null;
+  countries: string[] = [];
 
   constructor(
     private db: Database,
@@ -29,15 +32,21 @@ export class PartnersComponent implements OnInit {
       this.elements = partners as Partner[];
       this.dataSource = new MatTableDataSource(this.elements);
     });
+    Object.entries(countriesData).forEach((country) => {
+      this.countries.push(`${country[1]} (${country[0]})`);
+    });
+    this.selectedCountry = this.countries[0];
+
 
     this.whForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      country: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      country: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required, Validators.minLength(2)]),
       address: new FormControl('', [Validators.required, Validators.minLength(2)]),
       customer: new FormControl(''),
       suppliers: new FormControl('')
     });
+
   }
 
   applyFilter(event: Event) {
@@ -75,7 +84,13 @@ export class PartnersComponent implements OnInit {
   }
 
   createPartner = (whFormValue) => {
-    this.db.addArea(whFormValue);
+    if (!whFormValue.suppliers) {
+      whFormValue.suppliers = false;
+    }
+    if (!whFormValue.customer) {
+      whFormValue.customer = false;
+    }
+    this.db.addPartner(whFormValue);
     this.whForm.reset();
   }
 

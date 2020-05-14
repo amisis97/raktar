@@ -3,8 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Product } from 'src/app/interfaces/Product';
 import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { Database } from 'src/app/database.service';
-import { Area } from 'src/app/interfaces/Area';
-import { Partner } from 'src/app/interfaces/Partner';
+import { Sell } from 'src/app/interfaces/Sell';
 
 @Component({
   selector: 'app-receipts',
@@ -16,7 +15,7 @@ export class ReceiptsComponent implements OnInit {
   title = 'Vásárlók és beszállítók adatai';
   public whForm: FormGroup;
   displayedColumns: string[] = ['name', 'area', 'productNr', 'stock', 'unit', 'purchasePrice', 'price', 'supplier'];
-  elements: Product[] = [];
+  elements: Sell[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
 
@@ -27,9 +26,9 @@ export class ReceiptsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.db.getProducts().subscribe(products => {
-      this.elements = products as Product[];
-      this.elements.forEach(e => {
+    this.db.getReceipts().subscribe(products => {
+      //this.elements = products as Sell[];
+      /*this.elements.forEach(e => {
         const areaKey = e.area;
         const suppKey = e.supplier;
         e.area = null;
@@ -42,7 +41,7 @@ export class ReceiptsComponent implements OnInit {
           const temp = partner as Partner;
           e.supplier = temp.name;
         });
-      });
+      });*/
       this.dataSource = new MatTableDataSource(this.elements);
     });
 
@@ -61,37 +60,16 @@ export class ReceiptsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openDialog(element: Product): void {
+  openDialog(element: Sell): void {
     console.log('not work');
-  }
-
-  deleteProduct(productId: string) {
-    this.db.getProducts().subscribe(products => {
-      // let p = products.find(obj  => obj.partner === partnerId);
-      // Tipus hiba van
-      let p = null;
-      if(p) {
-        this.snackBar.open('Törlés sikertelen, előbb törölni kell a termékeket!', null, {
-          duration: 4000,
-        });
-      } else {
-        this.snackBar.open('Sikeres törlés!', null, {
-          duration: 2000,
-        });
-      }
-    });
   }
 
   hasError = (controlName: string, errorName: string) => {
     return this.whForm.controls[controlName].hasError(errorName);
   }
 
-  editProduct(productId: string) {
-
-  }
-
-  createProduct = (whFormValue) => {
-    this.db.addArea(whFormValue);
+  createReceipt = (whFormValue) => {
+    this.db.addReceipt(whFormValue);
     this.whForm.reset();
   }
 

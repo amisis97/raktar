@@ -9,6 +9,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Product } from './interfaces/Product';
 import { Partner } from './interfaces/Partner';
 import { Area } from './interfaces/Area';
+import { Sell } from './interfaces/Sell';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +113,10 @@ export class Database {
 
     }
 
+    addPartner(partner) {
+      this.db.collection('partners').add(partner);
+    }
+
     // Raktarosok
 
     getWorkers() {
@@ -129,6 +134,21 @@ export class Database {
 
     editWorker(wID: string) {
 
+    }
+
+    // Bevetelezes
+
+    getReceipts() {
+      return this.db.collection('receipts').valueChanges({idField: 'rID'});
+    }
+
+    getReceipt(rID: string) {
+      const c = 'receipts/' + rID;
+      return this.db.doc(c).valueChanges();
+    }
+
+    addReceipt(r: Sell) {
+      this.db.collection('receipts').add(r);
     }
 
     // Statisztika
