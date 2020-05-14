@@ -4,6 +4,8 @@ import { Product } from 'src/app/interfaces/Product';
 import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import { Sell } from 'src/app/interfaces/Sell';
+import { Buy } from 'src/app/interfaces/Buy';
+import { Partner } from 'src/app/interfaces/Partner';
 
 @Component({
   selector: 'app-receipts',
@@ -12,12 +14,16 @@ import { Sell } from 'src/app/interfaces/Sell';
 })
 export class ReceiptsComponent implements OnInit {
 
-  title = 'Vásárlók és beszállítók adatai';
+  title = 'Új bevételezés és termékbeszerzési előzmények';
   public whForm: FormGroup;
-  displayedColumns: string[] = ['name', 'area', 'productNr', 'stock', 'unit', 'purchasePrice', 'price', 'supplier'];
-  elements: Sell[] = [];
+  displayedColumns: string[] = ['bID', 'date', 'product', 'seller', 'stock',  'allprice'];
+  elements: Buy[] = [];
   dataSource = new MatTableDataSource(this.elements);
+  sellers: Partner[];
+  products: Product[];
   selectedElement = null;
+  selectedPartner = null;
+  selectedProduct = null;
 
   constructor(
     private db: Database,
@@ -26,32 +32,50 @@ export class ReceiptsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.db.getReceipts().subscribe(products => {
-      //this.elements = products as Sell[];
-      /*this.elements.forEach(e => {
-        const areaKey = e.area;
-        const suppKey = e.supplier;
-        e.area = null;
-        e.supplier = null;
-        this.db.getArea(areaKey).subscribe(area => {
-          const temp = area as Area;
-          e.area = temp.name;
+    this.db.getReceipts().subscribe(receipts => {
+      receipts.forEach(r => {
+        const temp = r as Buy;
+        this.db.getPartner(temp.sellerId).subscribe(s => {
+          const tempS = s as Partner;
+          temp.seller = tempS;
         });
-        this.db.getPartner(suppKey).subscribe(partner => {
-          const temp = partner as Partner;
-          e.supplier = temp.name;
+        this.db.getProduct(temp.productId).subscribe(p => {
+          const tempP = p as Product;
+          temp.product = tempP;
         });
-      });*/
+        this.elements.push(temp);
+      });
       this.dataSource = new MatTableDataSource(this.elements);
     });
 
+    this.db.getPartners().subscribe(partners => {
+      this.sellers = partners as Partner[];
+      this.sellers = this.sellers.filter(supplier => supplier.suppliers);
+      this.selectedPartner = this.sellers[0].pID;
+    });
+
+    this.db.getProducts().subscribe(products => {
+      this.products = products as Product[];
+      this.selectedProduct = this.products[0];
+    });
+
     this.whForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      country: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      city: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      address: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      customer: new FormControl(''),
-      suppliers: new FormControl('')
+      sellerId: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      productId: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      stock: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    });
+  }
+
+  changePartner(value) {
+    this.db.getProducts().subscribe(products => {
+      this.products = [];
+      products.forEach(p => {
+        const temp = p as Product;
+        if (temp.supplier === value) {
+          this.products.push(temp);
+        }
+      });
+      console.log(this.products);
     });
   }
 
@@ -60,17 +84,13 @@ export class ReceiptsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openDialog(element: Sell): void {
-    console.log('not work');
-  }
-
   hasError = (controlName: string, errorName: string) => {
     return this.whForm.controls[controlName].hasError(errorName);
   }
 
   createReceipt = (whFormValue) => {
-    this.db.addReceipt(whFormValue);
-    this.whForm.reset();
+    /*this.db.addReceipt(whFormValue);
+    this.whForm.reset();*/
   }
 
 }

@@ -15,7 +15,7 @@ import { Buy } from 'src/app/interfaces/Buy';
 })
 export class ProductsComponent implements OnInit {
 
-  title = 'Vásárlók és beszállítók adatai';
+  title = 'Termékkel kapcsolatos beállítások';
   public whForm: FormGroup;
   displayedColumns: string[] = ['name', 'area', 'productNr', 'stock', 'unit', 'purchasePrice', 'price', 'supplier', 'details', 'delete'];
   elements: Product[] = [];
@@ -105,8 +105,9 @@ export class ProductsComponent implements OnInit {
     this.db.addProduct(whFormValue).then(docRef => {
       const buy = {
         date: firestore.Timestamp.now(),
-        products: [docRef.id, whFormValue.stock],
-        seller: whFormValue.supplier
+        productId: docRef.id,
+        stock: whFormValue.stock,
+        sellerId: whFormValue.supplier
       };
       this.db.addReceipt(buy as Buy);
       this.whForm.reset();
@@ -154,14 +155,12 @@ export class ProductDialogDetails {
 
 
     this.productEditForm = new FormGroup({
+      pID: new FormControl(this.data.pID),
       name: new FormControl(this.data.name, [Validators.required, Validators.minLength(1)]),
-      area: new FormControl(this.data.area, [Validators.required]),
       productNr: new FormControl(this.data.productNr, [Validators.required, Validators.minLength(2)]),
-      stock: new FormControl(this.data.stock, [Validators.required, Validators.minLength(1)]),
       unit: new FormControl(this.data.unit, [Validators.required, Validators.minLength(1)]),
       purchasePrice: new FormControl(this.data.purchasePrice, [Validators.required, Validators.minLength(1)]),
       price: new FormControl(this.data.price, [Validators.required, Validators.minLength(1)]),
-      supplier: new FormControl(this.data.supplier, [Validators.required]),
     });
 
   }
@@ -171,13 +170,11 @@ export class ProductDialogDetails {
   }
 
   public editProduct = (productFormValue: any) => {
-    const overWriteValues = { ...this.data, ...productFormValue };
-    console.log(productFormValue);
-    /*this.db.editProduct(this.data.pID, overWriteValues);
+    this.db.editProduct(this.data.pID, productFormValue);
     this.dialogRef.close();
     this.snackBar.open('Sikeres módosítás!', null, {
       duration: 2000,
-    });*/
+    });
   }
 }
 

@@ -95,7 +95,8 @@ export class Database {
     }
 
     editProduct(pId: string, product: Product) {
-
+      const c = 'products/' + pId;
+      this.db.doc(c).update(product);
     }
 
     // Partnerek metodusok
@@ -145,7 +146,7 @@ export class Database {
     // Bevetelezes
 
     getReceipts() {
-      return this.db.collection('receipts').valueChanges({idField: 'rID'});
+      return this.db.collection('buy').valueChanges({idField: 'bID'});
     }
 
     getReceipt(rID: string) {
