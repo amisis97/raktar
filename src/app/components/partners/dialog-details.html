@@ -1,0 +1,28 @@
+<div *ngIf="this.data" class="selected-elem">
+  <h2>{{data.name}}</h2>
+  <form class="edit-form" [formGroup]="partnerEditForm" autocomplete="off" novalidate (ngSubmit)="editPartner(partnerEditForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <mat-form-field class="name">
+      <mat-label>Név</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="hasError('name', 'required')">Név megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Ország</mat-label>
+      <mat-select formControlName="country" matSelect>
+        <mat-option value="{{c}}" *ngFor="let c of countries">{{c}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('country', 'required')">Ország megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Város</mat-label>
+      <input formControlName="city" matInput>
+      <mat-error *ngIf="hasError('city', 'required')">Város megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Cím</mat-label>
+      <input formControlName="address"  matInput>
+      <mat-error *ngIf="hasError('address', 'required')">Cím megadása kötelező</mat-error>
+    </mat-form-field>
+    <button mat-flat-button color="primary">Módosítás</button>
+  </form>
+</div>

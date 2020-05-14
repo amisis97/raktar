@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Partner } from 'src/app/interfaces/Partner';
-import { MatTableDataSource, MatSnackBar, MatDialog, MatSelect } from '@angular/material';
+import { MatTableDataSource, MatSnackBar, MatDialog, MatSelect, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import countriesData from './countries.json';
 
@@ -14,7 +14,7 @@ export class PartnersComponent implements OnInit {
 
   title = 'Vásárlók és beszállítók adatai';
   public whForm: FormGroup;
-  displayedColumns: string[] = ['name', 'country', 'address', 'customer', 'suppliers'];
+  displayedColumns: string[] = ['name', 'country', 'address', 'customer', 'suppliers', 'details'];
   elements: Partner[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
@@ -55,7 +55,18 @@ export class PartnersComponent implements OnInit {
   }
 
   openDialog(element: Partner): void {
-    console.log('not work');
+    const dialogRef = this.dialog.open(PartnerDialogDetails, {
+      width: '450px',
+      data: element
+    });
+  }
+
+  selectRow(element: Partner) {
+    if (element === this.selectedElement) {
+      this.selectedElement = null;
+    } else {
+      this.selectedElement = element;
+    }
   }
 
   deletePartner(partnerId: string) {
@@ -94,4 +105,53 @@ export class PartnersComponent implements OnInit {
     this.whForm.reset();
   }
 
+}
+
+
+@Component({
+  selector: 'dialog-details',
+  templateUrl: './dialog-details.html',
+  styleUrls: ['./dialog-details.scss']
+})
+
+export class PartnerDialogDetails {
+
+  constructor(
+    public dialogRef: MatDialogRef<PartnerDialogDetails>,
+    private db: Database,
+    private snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: Partner) {}
+
+  public partnerEditForm: FormGroup;
+  countries: string[] = [];
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  ngOnInit() {
+    Object.entries(countriesData).forEach((country) => {
+      this.countries.push(`${country[1]} (${country[0]})`);
+    });
+    this.partnerEditForm = new FormGroup({
+      name: new FormControl(this.data.name, [Validators.required, Validators.minLength(2)]),
+      country: new FormControl(this.data.country, [Validators.required]),
+      city: new FormControl(this.data.city, [Validators.required, Validators.minLength(2)]),
+      address: new FormControl(this.data.address, [Validators.required, Validators.minLength(2)]),
+    });
+
+  }
+
+  public hasError = (controlName: string, errorName: string) =>{
+    return this.partnerEditForm.controls[controlName].hasError(errorName);
+  }
+
+  public editPartner = (partnerFormValue: any) => {
+    const overWriteValues = {...this.data, ...partnerFormValue};
+    this.db.editPartner(this.data.pID, overWriteValues);
+    this.dialogRef.close();
+    this.snackBar.open('Sikeres módosítás!', null, {
+      duration: 2000,
+    });
+  }
 }

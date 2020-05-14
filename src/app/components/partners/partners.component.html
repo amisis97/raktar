@@ -83,8 +83,13 @@
       </mat-form-field>
       <mat-checkbox formControlName="customer" name="customer">Vásárló</mat-checkbox>
       <mat-checkbox formControlName="suppliers" name="suppliers">Beszállító</mat-checkbox>
+      <ng-container matColumnDef="details">
+        <th class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
+        <td class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
+          <i class="material-icons">reorder</i>
+        </td>
+      </ng-container>
     </div>
     <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>
   </form>
 </mat-expansion-panel>
-<p>{{selectedCountry}}</p>

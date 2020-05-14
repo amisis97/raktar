@@ -109,8 +109,9 @@ export class Database {
       this.db.doc(c).delete();
     }
 
-    editPartner(pId: string) {
-
+    editPartner(pId: string, partner: Partner) {
+      const c = 'partners/' + pId;
+      this.db.doc(c).set(partner);
     }
 
     addPartner(partner) {
