@@ -6,6 +6,7 @@ import { Database } from 'src/app/database.service';
 import { Sell } from 'src/app/interfaces/Sell';
 import { Buy } from 'src/app/interfaces/Buy';
 import { Partner } from 'src/app/interfaces/Partner';
+import { firestore } from 'firebase';
 
 @Component({
   selector: 'app-receipts',
@@ -24,6 +25,7 @@ export class ReceiptsComponent implements OnInit {
   selectedElement = null;
   selectedPartner = null;
   selectedProduct = null;
+  selectedProductObj: Product;
 
   constructor(
     private db: Database,
@@ -33,17 +35,16 @@ export class ReceiptsComponent implements OnInit {
 
   ngOnInit() {
     this.db.getReceipts().subscribe(receipts => {
-      receipts.forEach(r => {
-        const temp = r as Buy;
-        this.db.getPartner(temp.sellerId).subscribe(s => {
+      this.elements = receipts as Buy[];
+      this.elements.forEach(r => {
+        this.db.getPartner(r.sellerId).subscribe(s => {
           const tempS = s as Partner;
-          temp.seller = tempS;
+          r.seller = tempS;
         });
-        this.db.getProduct(temp.productId).subscribe(p => {
+        this.db.getProduct(r.productId).subscribe(p => {
           const tempP = p as Product;
-          temp.product = tempP;
+          r.product = tempP;
         });
-        this.elements.push(temp);
       });
       this.dataSource = new MatTableDataSource(this.elements);
     });
@@ -62,7 +63,8 @@ export class ReceiptsComponent implements OnInit {
     this.whForm = new FormGroup({
       sellerId: new FormControl('', [Validators.required, Validators.minLength(2)]),
       productId: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      stock: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      stock: new FormControl('', [Validators.required, Validators.minLength(2), Validators.min(1)]),
+      date: new FormControl(firestore.Timestamp.now())
     });
   }
 
@@ -75,7 +77,13 @@ export class ReceiptsComponent implements OnInit {
           this.products.push(temp);
         }
       });
-      console.log(this.products);
+    });
+  }
+
+  changeProduct(value) {
+    this.db.getProduct(value).subscribe(product => {
+      const temp = product as Product;
+      this.selectedProductObj = temp;
     });
   }
 
@@ -89,8 +97,13 @@ export class ReceiptsComponent implements OnInit {
   }
 
   createReceipt = (whFormValue) => {
-    /*this.db.addReceipt(whFormValue);
-    this.whForm.reset();*/
+    this.selectedProductObj.stock += whFormValue.stock;
+    console.log(this.selectedProductObj);
+    this.db.editProduct(this.selectedProductObj.pID, this.selectedProductObj);
+    this.whForm.reset();
+    this.snackBar.open('A termék bevételezve lett a raktárba!', null, {
+      duration: 2000,
+    });
   }
 
 }

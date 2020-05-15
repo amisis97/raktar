@@ -69,6 +69,11 @@ export class Database {
       this.db.collection('warehouse').add(area);
     }
 
+    editArea(areaId: string, area: Area) {
+      const c = 'warehouse/' + areaId;
+      this.db.doc(c).update(area);
+    }
+
     deleteArea(areaId: string) {
       const c = 'warehouse/' + areaId;
       this.db.doc(c).delete();
@@ -117,7 +122,7 @@ export class Database {
 
     editPartner(pId: string, partner: Partner) {
       const c = 'partners/' + pId;
-      this.db.doc(c).set(partner);
+      this.db.doc(c).update(partner);
     }
 
     addPartner(partner) {

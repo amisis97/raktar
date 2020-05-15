@@ -97,17 +97,17 @@
       <mat-form-field>
         <mat-label>Mennyiség</mat-label>
         <input formControlName="stock" name="stock" type="number" matInput placeholder="" value="">
-        <mat-error *ngIf="hasError('stock', 'required')">Név megadása kötelező</mat-error>
+        <mat-error *ngIf="hasError('stock', 'required')">Mennyiség megadása kötelező</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Mértékegység</mat-label>
         <input formControlName="unit" name="unit" matInput placeholder="" value="">
-        <mat-error *ngIf="hasError('unit', 'required')">Név megadása kötelező</mat-error>
+        <mat-error *ngIf="hasError('unit', 'required')">Mértékegység megadása kötelező</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Beszállítói ár</mat-label>
         <input formControlName="purchasePrice" type="number" name="purchasePrice" matInput placeholder="" value="">
-        <mat-error *ngIf="hasError('purchasePrice', 'required')">Név megadása kötelező</mat-error>
+        <mat-error *ngIf="hasError('purchasePrice', 'required')">Beszállítói ár megadása kötelező</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Eladási ár</mat-label>
@@ -119,7 +119,7 @@
         <mat-select formControlName="supplier" placeholder="" [(value)]="selectedSupplier">
           <mat-option value="{{s.pID}}" *ngFor="let s of suppliers">{{s.name}}</mat-option>
         </mat-select>
-        <mat-error *ngIf="hasError('supplier', 'required')">Raktár megadása kötelező</mat-error>
+        <mat-error *ngIf="hasError('supplier', 'required')">Beszállító megadása kötelező</mat-error>
       </mat-form-field>
     </div>
     <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>

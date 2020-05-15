@@ -62,10 +62,17 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Termék</mat-label>
-        <mat-select formControlName="productId" placeholder="" [(value)]="selectedProduct">
+        <mat-select (selectionChange)="changeProduct($event.value)" formControlName="productId" placeholder="" [(value)]="selectedProduct">
           <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}}</mat-option>
         </mat-select>
         <mat-error *ngIf="hasError('sellerId', 'required')">Raktár megadása kötelező</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Mennyiség</mat-label>
+        <input matInput formControlName="stock" type="number" placeholder="" value="" min="1">
+        <span *ngIf="selectedProductObj" matSuffix>{{selectedProductObj.unit}}</span>
+        <mat-error *ngIf="hasError('stock', 'required')">Mennyiség megadása kötelező</mat-error>
+        <mat-error *ngIf="hasError('stock', 'min')">Mennyiségnek nagyobbnak kell lennie mint 0</mat-error>
       </mat-form-field>
     </div>
     <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>

@@ -1,0 +1,26 @@
+<div *ngIf="this.data" class="selected-elem">
+  <h2>{{data.name}}</h2>
+  <form class="edit-form" [formGroup]="warehouseEditForm" autocomplete="off" novalidate (ngSubmit)="editWarehouse(warehouseEditForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <mat-form-field>
+      <mat-label>Zóna neve</mat-label>
+      <input formControlName="name" matInput>
+      <mat-error *ngIf="hasError('name', 'required')">Zóna megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Sor</mat-label>
+      <input formControlName="row" min="1" maxlength="5" type="number" matInput>
+      <mat-error *ngIf="hasError('row', 'required')">Sor megadása kötelező (szám)</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Oszlop</mat-label>
+      <input formControlName="column" min="1" maxlength="5" type="number" matInput>
+      <mat-error *ngIf="hasError('column', 'required')">Oszlop megadása kötelező (szám)</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Polc</mat-label>
+      <input formControlName="shelf"  matInput>
+      <mat-error *ngIf="hasError('shelf', 'required')">Polc megadása kötelező</mat-error>
+    </mat-form-field>
+    <button mat-flat-button color="primary">Módosítás</button>
+  </form>
+</div>

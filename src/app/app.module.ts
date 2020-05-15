@@ -31,7 +31,7 @@ import { Database } from './database.service';
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
 import { TasksComponent, DialogDetails } from './components/tasks/tasks.component';
 import { PartnersComponent, PartnerDialogDetails } from './components/partners/partners.component';
-import { WarehouseComponent } from './components/warehouse/warehouse.component';
+import { WarehouseComponent, WarehouseDialogDetails } from './components/warehouse/warehouse.component';
 import { WarehousePageComponent } from './pages/warehouse-page/warehouse-page.component';
 import { PartnersPageComponent } from './pages/partners-page/partners-page.component';
 import { ProductsPageComponent } from './pages/products-page/products-page.component';
@@ -55,6 +55,7 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
     DialogDetails,
     PartnerDialogDetails,
     ProductDialogDetails,
+    WarehouseDialogDetails,
     PartnersComponent,
     WarehouseComponent,
     WarehousePageComponent,
@@ -72,7 +73,8 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
   entryComponents: [
     DialogDetails,
     PartnerDialogDetails,
-    ProductDialogDetails
+    ProductDialogDetails,
+    WarehouseDialogDetails
   ],
   imports: [
     BrowserModule,
