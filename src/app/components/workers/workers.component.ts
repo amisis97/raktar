@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { Database } from 'src/app/database.service';
-import { Area } from 'src/app/interfaces/Area';
+import { Product } from 'src/app/interfaces/Product';
 
 @Component({
   selector: 'app-workers',
@@ -11,12 +11,15 @@ import { Area } from 'src/app/interfaces/Area';
 })
 export class WorkersComponent implements OnInit {
 
-  title = 'Raktárral kapcsolatos beállítások';
+  title = 'Raktárosok és feladat kiadása';
   public whForm: FormGroup;
-  displayedColumns: string[] = ['name', 'row', 'column', 'shelf', 'details', 'delete'];
-  elements: Area[] = [];
+  displayedColumns: string[] = ['name', 'address', 'email', 'details', 'delete'];
+  elements: Worker[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
+  addProducts = [];
+  products: Product[];
+  selectedProduct = null;
 
   constructor(
     private db: Database,
@@ -25,18 +28,24 @@ export class WorkersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.db.getAreas().subscribe(areas => {
-      this.elements = areas as Area[];
+    this.db.getWorkers().subscribe(workers => {
+      this.elements = workers as unknown as Worker[];
       this.dataSource = new MatTableDataSource(this.elements);
     });
 
     this.whForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(10)]),
-      row: new FormControl('', [Validators.required, Validators.maxLength(5)]),
-      column: new FormControl('', [Validators.required, Validators.maxLength(5)]),
-      shelf: new FormControl('', [Validators.required, Validators.maxLength(10)])
+      name: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      address: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      email: new FormControl('', [Validators.required, Validators.minLength(3)])
+    });
+
+    this.db.getProducts().subscribe(products => {
+      this.products = products as Product[];
+      this.selectedProduct = this.products[0];
     });
   }
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -72,9 +81,22 @@ export class WorkersComponent implements OnInit {
 
   }
 
-  createWorker = (whFormValue: Area) => {
-    this.db.addArea(whFormValue);
+  createWorker = (whFormValue: Worker) => {
+    this.db.addWorker(whFormValue);
+    this.snackBar.open('Sikeres hozzáadás!', null, {
+      duration: 2000,
+    });
     this.whForm.reset();
+  }
+
+  createList = (whFormValue) => {
+    console.log(whFormValue);
+  }
+
+  addNewProductRow(e) {
+    e.preventDefault();
+    console.log("work");
+    this.addProducts.push('product' + this.addProducts.length);
   }
 
 }

@@ -1,1 +1,103 @@
-<p>workers works!</p>
+<h2 class="title">{{title}}</h2>
+
+<mat-form-field>
+  <mat-label>Kereső</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="keresés...">
+</mat-form-field>
+<div class="warehouse-table-container mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="workers-table">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Név</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.name">{{element.name}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.email">{{element.email}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef>Cím</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.address">{{element.address}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="details">
+      <th class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
+      <td class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
+        <i class="material-icons">reorder</i>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
+      <td class="align-right" mat-cell *matCellDef="let element">
+        <i (click)="deleteWorker(element.areaId)" class="material-icons">delete</i>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<!-- Új terület -->
+<mat-expansion-panel class="add-new-worker">
+  <mat-expansion-panel-header>Új raktáros hozzáadása</mat-expansion-panel-header>
+  <form [formGroup]="whForm" autocomplete="off" novalidate (ngSubmit)="createWorker(whForm.value)"
+    fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <div class="flex">
+      <mat-form-field>
+        <mat-label>Név</mat-label>
+        <input formControlName="name" name="name" matInput placeholder="" value="">
+        <mat-error *ngIf="hasError('name', 'required')">Név megadása kötelező</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Jelszó</mat-label>
+        <input formControlName="password" type="password" name="password" matInput placeholder="" value="">
+        <mat-error *ngIf="hasError('password', 'required')">Jelszó megadása kötelező</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input formControlName="email" name="email" type="email" matInput placeholder="" value="">
+        <mat-error *ngIf="hasError('email', 'required')">Email megadása kötelező</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Cím</mat-label>
+        <input formControlName="address" name="address" matInput placeholder="" value="">
+        <mat-error *ngIf="hasError('address', 'required')">Cím megadása kötelező</mat-error>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>
+  </form>
+</mat-expansion-panel>
+
+<!-- Új terület -->
+<mat-expansion-panel class="add-new-list">
+  <mat-expansion-panel-header>Új összekészítési lista hozzáadása</mat-expansion-panel-header>
+  <form autocomplete="off" novalidate (ngSubmit)="createList(whForm.value)"
+    fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <div class="flex">
+      <button class="addnewrow" (click)="addNewProductRow($event)" mat-raised-button color="primary">Új termék
+        hozzáadása</button>
+      <div class="mat-form-field-wrap" *ngFor="let item of addProducts">
+        <mat-form-field>
+          <mat-label>Termék neve</mat-label>
+          <mat-select formControlName="productId" placeholder="" [(value)]="selectedProduct">
+            <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}}
+              ({{product.productNr}})</mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('name', 'required')">Név megadása kötelező</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Mennyiség</mat-label>
+          <input matInput formControlName="stock" type="number" placeholder="" value="" min="1">
+          <!--<span *ngIf="selectedProductObj" matSuffix>{{selectedProductObj.unit}}</span>-->
+          <mat-error *ngIf="hasError('stock', 'required')">Mennyiség megadása kötelező</mat-error>
+          <!--<mat-error *ngIf="hasError('stock', 'min')">Mennyiségnek nagyobbnak kell lennie mint 0</mat-error>-->
+        </mat-form-field>
+      </div>
+    </div>
+    <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>
+  </form>
+</mat-expansion-panel>

@@ -100,6 +100,7 @@ export class Database {
     }
 
     editProduct(pId: string, product: Product) {
+      console.log(product);
       const c = 'products/' + pId;
       this.db.doc(c).update(product);
     }
@@ -146,6 +147,10 @@ export class Database {
 
     editWorker(wID: string) {
 
+    }
+
+    addWorker(worker: Worker) {
+      this.db.collection('workers').add(worker);
     }
 
     // Bevetelezes

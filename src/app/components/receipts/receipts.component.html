@@ -63,7 +63,7 @@
       <mat-form-field>
         <mat-label>Termék</mat-label>
         <mat-select (selectionChange)="changeProduct($event.value)" formControlName="productId" placeholder="" [(value)]="selectedProduct">
-          <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}}</mat-option>
+          <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}} ({{product.productNr}})</mat-option>
         </mat-select>
         <mat-error *ngIf="hasError('sellerId', 'required')">Raktár megadása kötelező</mat-error>
       </mat-form-field>

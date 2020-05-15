@@ -97,9 +97,12 @@ export class ReceiptsComponent implements OnInit {
   }
 
   createReceipt = (whFormValue) => {
-    this.selectedProductObj.stock += whFormValue.stock;
-    console.log(this.selectedProductObj);
-    this.db.editProduct(this.selectedProductObj.pID, this.selectedProductObj);
+    if (this.selectedProductObj) {
+      const newTemp = this.selectedProductObj;
+      newTemp.stock += whFormValue.stock;
+      this.db.editProduct(this.selectedProduct, newTemp);
+      this.db.addReceipt(whFormValue);
+    }
     this.whForm.reset();
     this.snackBar.open('A termék bevételezve lett a raktárba!', null, {
       duration: 2000,
