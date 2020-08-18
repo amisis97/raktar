@@ -56,6 +56,10 @@ export class Database {
 
     // Raktarak metodusok
 
+    getWarehouses() {
+      return this.db.collection('warehouse_list').valueChanges({idField: 'whId'});
+    }
+
     getAreas() {
       return this.db.collection('warehouse').valueChanges({idField: 'areaId'});
     }

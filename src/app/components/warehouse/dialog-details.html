@@ -1,8 +1,8 @@
 <div *ngIf="this.data" class="selected-elem">
-  <h2>{{data.name}}</h2>
+  <h2>{{data.shelf}}</h2>
   <form class="edit-form" [formGroup]="warehouseEditForm" autocomplete="off" novalidate (ngSubmit)="editWarehouse(warehouseEditForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
     <mat-form-field>
-      <mat-label>Zóna neve</mat-label>
+      <mat-label>Raktár neve</mat-label>
       <input formControlName="name" matInput>
       <mat-error *ngIf="hasError('name', 'required')">Zóna megadása kötelező</mat-error>
     </mat-form-field>

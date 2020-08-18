@@ -5,6 +5,7 @@ import { Database } from 'src/app/database.service';
 import { Area } from 'src/app/interfaces/Area';
 import { Product } from 'src/app/interfaces/Product';
 import { TaskElement } from 'src/app/interfaces/TaskElement';
+import { Warehouse } from 'src/app/interfaces/Warehouse';
 
 @Component({
   selector: 'app-warehouse',
@@ -19,6 +20,7 @@ export class WarehouseComponent implements OnInit {
   elements: Area[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
+  warehouseList: Warehouse[] = [];
 
   constructor(
     private db: Database,
@@ -31,6 +33,11 @@ export class WarehouseComponent implements OnInit {
       this.elements = areas as Area[];
       this.dataSource = new MatTableDataSource(this.elements);
     });
+
+    this.db.getWarehouses().subscribe(wh => {
+      this.warehouseList = wh as Warehouse[];
+    });
+
 
     this.whForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(10)]),
