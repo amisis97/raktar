@@ -4,7 +4,18 @@
   width: 300px;
   background-color: $sideNavBgColor;
   color: $sideNavColor;
+  transition: width .5s ease-in-out;
+}
+#leftMenu.small {
+  width: 54px;
 }
 #mainPanel {
   height: $navbarHeight;
+}
+#leftMenu .change-view {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 40px;
+  cursor: pointer;
 }

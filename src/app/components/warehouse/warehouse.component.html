@@ -1,8 +1,28 @@
 <h2 class="title">{{title}}</h2>
 
-<select>
-  <option *ngFor="let wh of warehouseList">{{wh.name}}</option>
-</select>
+<mat-card class="wh-card">
+  <div class="wh-list">
+    <div *ngFor="let wh of warehouseList">{{wh.name}} - {{wh.address}}
+      <i (click)="deleteWh(wh.whId)" class="material-icons">delete</i>
+    </div>
+  </div>
+  <form [formGroup]="newWhForm" autocomplete="off" novalidate (ngSubmit)="addWh(newWhForm.value)"
+      fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+      <div class="flex">
+        <mat-form-field>
+          <mat-label>Raktár neve</mat-label>
+          <input formControlName="name" name="name" matInput placeholder="" value="">
+          <mat-error *ngIf="hasError('name', 'required')">Raktár megadása kötelező</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Raktár címe</mat-label>
+          <input formControlName="address" type="text" name="row" matInput placeholder="" value="">
+          <mat-error *ngIf="hasError('row', 'required')">Cím megadása kötelező</mat-error>
+        </mat-form-field>
+      </div>
+      <button mat-raised-button color="primary" [disabled]="!newWhForm.valid">Hozzáadás</button>
+    </form>
+</mat-card>
 
 <mat-form-field>
   <mat-label>Kereső</mat-label>
@@ -36,14 +56,14 @@
     </ng-container>
     <ng-container matColumnDef="details">
       <th class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
-      <td class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
+      <td class="align-right" (click)="openDialog(element.areaId)" mat-cell *matCellDef="let element">
         <i class="material-icons">reorder</i>
       </td>
     </ng-container>
     <ng-container matColumnDef="delete">
       <th class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
       <td class="align-right" mat-cell *matCellDef="let element">
-        <i (click)="deleteTask(element.areaId)" class="material-icons">delete</i>
+        <i (click)="deleteArea(element.areaId)" class="material-icons">delete</i>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -54,12 +74,14 @@
 <!-- Új terület -->
 <mat-expansion-panel class="add-new-area">
   <mat-expansion-panel-header>Új terület hozzáadása</mat-expansion-panel-header>
-  <form [formGroup]="whForm" autocomplete="off" novalidate (ngSubmit)="createTask(whForm.value)"
+  <form [formGroup]="whForm" autocomplete="off" novalidate (ngSubmit)="createArea(whForm.value)"
     fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
     <div class="flex">
       <mat-form-field>
-        <mat-label>Raktár neve</mat-label>
-        <input formControlName="name" name="name" matInput placeholder="" value="">
+        <mat-label>Raktár</mat-label>
+        <mat-select appearance="fill" formControlName="name" placeholder="" [(value)]="selectedWh">
+          <mat-option value="{{wh.whId}}" *ngFor="let wh of warehouseList">{{wh.name}}</mat-option>
+        </mat-select>
         <mat-error *ngIf="hasError('name', 'required')">Raktár megadása kötelező</mat-error>
       </mat-form-field>
       <mat-form-field>

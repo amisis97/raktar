@@ -1,7 +1,8 @@
 <!--<app-navbar></app-navbar> top bar menu deleted -->
 <mat-sidenav-container class="example-container">
-  <mat-sidenav id="leftMenu" mode="side" opened *ngIf="isLoggedIn">
+  <mat-sidenav [class.small]="small" id="leftMenu" mode="side" opened *ngIf="isLoggedIn">
     <app-menu></app-menu>
+    <i (click)="changeView()" class="change-view material-icons">menu_open</i>
   </mat-sidenav>
   <mat-sidenav-content id="mainPanel">
     <router-outlet></router-outlet>

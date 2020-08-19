@@ -13,6 +13,13 @@ export class AppComponent {
 
   title = 'raktar';
   isLoggedIn = this.authService.isLoggedIn;
+  small = false;
+
+  changeView() {
+    document.querySelector('#');
+    /*this.small = !this.small;
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 500);*/
+  }
 }
 
 export function sameDay(d1: Date, d2: Date) {

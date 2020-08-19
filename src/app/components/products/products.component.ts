@@ -7,6 +7,7 @@ import { Area } from 'src/app/interfaces/Area';
 import { Partner } from 'src/app/interfaces/Partner';
 import { firestore } from 'firebase';
 import { Buy } from 'src/app/interfaces/Buy';
+import { Warehouse } from 'src/app/interfaces/Warehouse';
 
 @Component({
   selector: 'app-products',
@@ -42,7 +43,10 @@ export class ProductsComponent implements OnInit {
         e.supplier = null;
         this.db.getArea(areaKey).subscribe(area => {
           const temp = area as Area;
-          e.area = temp.name;
+          this.db.getWarehouse(temp.name).subscribe(wh => {
+            const whTemp = wh as Warehouse;
+            e.area = whTemp.name + ' ('  + temp.shelf + ')';
+          });
         });
         this.db.getPartner(suppKey).subscribe(partner => {
           const temp = partner as Partner;
@@ -58,6 +62,12 @@ export class ProductsComponent implements OnInit {
     });
     this.db.getAreas().subscribe(areas => {
       this.areas = areas as Area[];
+      this.areas.forEach(area => {
+        this.db.getWarehouse(area.name).subscribe(wh => {
+          const tempWh = wh as Warehouse;
+          area.name = tempWh.name;
+        });
+      });
       this.selectedArea = this.areas[0].areaId;
     });
 
@@ -95,10 +105,6 @@ export class ProductsComponent implements OnInit {
 
   hasError = (controlName: string, errorName: string) => {
     return this.whForm.controls[controlName].hasError(errorName);
-  }
-
-  editProduct(product: Product) {
-    console.log(product);
   }
 
   createProduct = (whFormValue: Product) => {

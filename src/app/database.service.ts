@@ -11,6 +11,7 @@ import { Partner } from './interfaces/Partner';
 import { Area } from './interfaces/Area';
 import { Sell } from './interfaces/Sell';
 import { Buy } from './interfaces/Buy';
+import { Warehouse } from './interfaces/Warehouse';
 
 @Injectable({
   providedIn: 'root'
@@ -58,6 +59,20 @@ export class Database {
 
     getWarehouses() {
       return this.db.collection('warehouse_list').valueChanges({idField: 'whId'});
+    }
+
+    getWarehouse(whId: string) {
+      const c = 'warehouse_list/' + whId;
+      return this.db.doc(c).valueChanges();
+    }
+
+    addWarehouse(wh: Warehouse) {
+      this.db.collection('warehouse_list').add(wh);
+    }
+
+    deleteWarehouse(whId: string) {
+      const c = 'warehouse_list/' + whId;
+      this.db.doc(c).delete();
     }
 
     getAreas() {

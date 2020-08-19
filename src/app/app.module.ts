@@ -20,6 +20,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatListModule } from '@angular/material/list';
+import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher, MatNativeDateModule, MatOption, MatOptionModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -42,7 +45,7 @@ import { StatPageComponent } from './pages/stat-page/stat-page.component';
 import { BuyStatComponent } from './components/buy-stat/buy-stat.component';
 import { SellStatComponent } from './components/sell-stat/sell-stat.component';
 import { ReceiptsPageComponent } from './pages/receipts-page/receipts-page.component';
-import { ReceiptsComponent } from './components/receipts/receipts.component';
+import { ReceiptsComponent, MatPaginatorIntlHu } from './components/receipts/receipts.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +104,10 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
     MatExpansionModule,
     MatSnackBarModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatListModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   providers: [
     AuthService,
@@ -109,7 +115,8 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
     Database,
     AngularFirestore,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlHu}],
   ],
   bootstrap: [AppComponent]
 })

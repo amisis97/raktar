@@ -16,10 +16,11 @@ export class WarehouseComponent implements OnInit {
 
   title = 'Raktárral kapcsolatos beállítások';
   public whForm: FormGroup;
+  public newWhForm: FormGroup;
   displayedColumns: string[] = ['name', 'row', 'column', 'shelf', 'details', 'delete'];
   elements: Area[] = [];
   dataSource = new MatTableDataSource(this.elements);
-  selectedElement = null;
+  selectedWh: string = null;
   warehouseList: Warehouse[] = [];
 
   constructor(
@@ -31,19 +32,32 @@ export class WarehouseComponent implements OnInit {
   ngOnInit() {
     this.db.getAreas().subscribe(areas => {
       this.elements = areas as Area[];
+      this.elements.forEach(e => {
+        const whId = e.name;
+        this.db.getWarehouse(whId).subscribe(wh => {
+          const temp = wh as Warehouse;
+          e.name = temp.name;
+        });
+      });
       this.dataSource = new MatTableDataSource(this.elements);
     });
 
     this.db.getWarehouses().subscribe(wh => {
       this.warehouseList = wh as Warehouse[];
+      this.selectedWh = this.warehouseList[0].whId;
     });
 
 
     this.whForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(10)]),
+      name: new FormControl('', [Validators.required]),
       row: new FormControl('', [Validators.required, Validators.maxLength(5)]),
       column: new FormControl('', [Validators.required, Validators.maxLength(5)]),
       shelf: new FormControl('', [Validators.required, Validators.maxLength(10)])
+    });
+
+    this.newWhForm = new FormGroup({
+      name: new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
     });
   }
 
@@ -52,23 +66,27 @@ export class WarehouseComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  openDialog(element: Area): void {
-    const dialogRef = this.dialog.open(WarehouseDialogDetails, {
-      width: '450px',
-      data: element
+  openDialog(areaId: string): void {
+    this.db.getArea(areaId).subscribe(area => {
+      const tempArea = area as Area;
+      tempArea.areaId = areaId;
+      this.dialog.open(WarehouseDialogDetails, {
+        width: '450px',
+        data: tempArea
+      });
     });
   }
 
-  deleteTask(areaId: string) {
+  deleteArea(areaId: string) {
     this.db.getProducts().subscribe(products => {
       let error = false;
       products.forEach(p => {
         const temp = p as Product;
-        if(temp.area === areaId) {
+        if (temp.area === areaId) {
           error = true;
         }
       });
-      if(error) {
+      if (error) {
         this.snackBar.open('Törlés sikertelen, előbb törölni kell a termékeket!', null, {
           duration: 4000,
         });
@@ -81,7 +99,7 @@ export class WarehouseComponent implements OnInit {
     });
   }
 
-  hasError = (controlName: string, errorName: string) => {
+  hasError(controlName: string, errorName: string) {
     return this.whForm.controls[controlName].hasError(errorName);
   }
 
@@ -89,9 +107,37 @@ export class WarehouseComponent implements OnInit {
 
   }
 
-  createTask = (whFormValue: Area) => {
+  createArea(whFormValue: Area) {
     this.db.addArea(whFormValue);
     this.whForm.reset();
+  }
+
+  deleteWh(whId) {
+    this.db.getAreas().subscribe(areas => {
+      let error = false;
+      areas.forEach(a => {
+        const temp = a as Area;
+        if (temp.name === whId) {
+          error = true;
+        }
+      });
+      if (error) {
+        this.snackBar.open('Törlés sikertelen, előbb törölni kell a polchelyeket!', null, {
+          duration: 4000,
+        });
+      } else {
+        this.db.deleteWarehouse(whId);
+        this.snackBar.open('Sikeres törlés!', null, {
+          duration: 2000,
+        });
+      }
+    });
+
+  }
+
+  addWh(newWhFormValue: Warehouse) {
+    this.db.addWarehouse(newWhFormValue);
+    this.newWhForm.reset();
   }
 
 }
@@ -106,27 +152,34 @@ export class WarehouseComponent implements OnInit {
 export class WarehouseDialogDetails {
 
   public warehouseEditForm: FormGroup;
+  warehouseList: Warehouse[] = [];
+  selectedWh: string = null;
 
   constructor(
     public dialogRef: MatDialogRef<WarehouseDialogDetails>,
     private db: Database,
     private snackBar: MatSnackBar,
-    @Inject(MAT_DIALOG_DATA) public data: Area) {}
+    @Inject(MAT_DIALOG_DATA) public data: Area) { }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   ngOnInit() {
+    console.log(this.data);
+    this.db.getWarehouses().subscribe(wh => {
+      this.warehouseList = wh as Warehouse[];
+      this.selectedWh = this.warehouseList[0].whId;
+    });
     this.warehouseEditForm = new FormGroup({
-      name: new FormControl(this.data.name, [Validators.required, Validators.maxLength(10)]),
+      name: new FormControl(this.data.name, [Validators.required]),
       row: new FormControl(this.data.row, [Validators.required, Validators.maxLength(5)]),
       column: new FormControl(this.data.column, [Validators.required, Validators.maxLength(5)]),
       shelf: new FormControl(this.data.shelf, [Validators.required, Validators.maxLength(10)])
     });
   }
 
-  public hasError = (controlName: string, errorName: string) =>{
+  public hasError = (controlName: string, errorName: string) => {
     return this.warehouseEditForm.controls[controlName].hasError(errorName);
   }
 

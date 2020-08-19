@@ -4,15 +4,24 @@
 .warehouse-table .align-right {
   text-align: right;
 }
-.add-new-area .mat-form-field {
+.add-new-area .mat-form-field,
+.wh-card .mat-form-field {
   margin-right: 10px;
 }
-.add-new-area button {
+.add-new-area button,
+.wh-card button {
   margin-top: 10px;
 }
 .add-new-area {
   margin: 15px 0;
 }
 .warehouse-table i {
+  cursor: pointer;
+}
+.wh-list > div {
+  display: flex;
+  align-items: center;
+}
+.wh-list i {
   cursor: pointer;
 }

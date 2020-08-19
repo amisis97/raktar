@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Product } from 'src/app/interfaces/Product';
-import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSnackBar, MatDialog, MatSort, MatPaginator, MatPaginatorIntl } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import { Sell } from 'src/app/interfaces/Sell';
 import { Buy } from 'src/app/interfaces/Buy';
@@ -27,6 +27,9 @@ export class ReceiptsComponent implements OnInit {
   selectedProduct = null;
   selectedProductObj: Product;
 
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   constructor(
     private db: Database,
     private snackBar: MatSnackBar,
@@ -47,6 +50,8 @@ export class ReceiptsComponent implements OnInit {
         });
       });
       this.dataSource = new MatTableDataSource(this.elements);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
 
     this.db.getPartners().subscribe(partners => {
@@ -109,4 +114,12 @@ export class ReceiptsComponent implements OnInit {
     });
   }
 
+}
+
+export class MatPaginatorIntlHu extends MatPaginatorIntl {
+  itemsPerPageLabel = 'Oldalméret';
+  nextPageLabel     = 'Következő oldal';
+  previousPageLabel = 'Előző oldal';
+  lastPageLabel = 'Utolsó oldal';
+  firstPageLabel = 'Első oldal';
 }

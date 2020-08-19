@@ -2,9 +2,11 @@
   <h2>{{data.shelf}}</h2>
   <form class="edit-form" [formGroup]="warehouseEditForm" autocomplete="off" novalidate (ngSubmit)="editWarehouse(warehouseEditForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
     <mat-form-field>
-      <mat-label>Raktár neve</mat-label>
-      <input formControlName="name" matInput>
-      <mat-error *ngIf="hasError('name', 'required')">Zóna megadása kötelező</mat-error>
+      <mat-label>Raktár</mat-label>
+      <mat-select formControlName="name" placeholder="" [(value)]="selectedWh">
+        <mat-option value="{{wh.whId}}" *ngFor="let wh of warehouseList">{{wh.name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('name', 'required')">Raktár megadása kötelező</mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Sor</mat-label>
