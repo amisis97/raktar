@@ -17,6 +17,7 @@ $border-bottom: 1px solid #ccc;
   padding: 20px 0;
   border-bottom: $border-bottom;
   position: relative;
+  transition: visibility .3s linear;
 }
 #menu .menu-item {
   height: 60px;
@@ -25,9 +26,11 @@ $border-bottom: 1px solid #ccc;
   border-bottom: $border-bottom;
   transition: background-color 0.3s ease-in-out;
 }
-#menu .menu-item:hover {
+#menu .menu-item:hover,
+#menu .menu-item.active {
   transition: background-color 0.3s ease-in-out;
   background-color: #273238;
+  cursor: pointer;
 }
 #menu .menu-item a,
 #menu .menu-item a:hover,

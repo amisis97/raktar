@@ -12,14 +12,23 @@ export class AppComponent {
   ) {}
 
   title = 'raktar';
-  isLoggedIn = this.authService.isLoggedIn;
-  small = false;
+  isLoggedIn: boolean;
+  small: boolean;
+  iconName: string;
+
+  ngOnInit() {
+    this.small = localStorage.getItem('view') ? JSON.parse(localStorage.view) : false;
+    this.isLoggedIn = this.authService.isLoggedIn;
+    this.iconName = 'menu_open';
+  }
 
   changeView() {
-    document.querySelector('#');
-    /*this.small = !this.small;
-    setTimeout(() => window.dispatchEvent(new Event('resize')), 500);*/
+    this.small = !this.small;
+    this.iconName = this.iconName === 'menu_open' ? 'menu' : 'menu_open';
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+    localStorage.setItem('view', this.small.toString());
   }
+
 }
 
 export function sameDay(d1: Date, d2: Date) {

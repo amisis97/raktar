@@ -1,16 +1,21 @@
 <div id="menu">
-  <div class="profile">
+  <div *ngIf="!hideProfile" class="profile">
     <div class="profile-img">
-      <img src="assets/user.svg">
+      <img *ngIf="user" src="{{user.img}}">
     </div>
     <div class="flex-break"></div>
-    <span *ngIf="this.user">{{this.user.displayName}}</span>
+    <span *ngIf="user">{{user.displayName}}</span>
   </div>
-  <div class="menu-item" *ngFor="let menu of menuItems">
+  <div class="menu-item" [class.active]="menu.url === router.url" *ngFor="let menu of menuItems">
     <a [routerLink]="[menu.url]">
       <i class="material-icons">{{menu.icon}}</i>
       <span>{{menu.title}}</span>
     </a>
   </div>
-  <button *ngIf="isLoggedIn" mat-raised-button (click)="logout()">Kijelentkezés</button>
+  <div *ngIf="isLoggedIn" class="menu-item active">
+    <a (click)="logout()">
+      <i class="material-icons">exit_to_app</i>
+      <span>Kijelentkezés</span>
+    </a>
+  </div>
 </div>

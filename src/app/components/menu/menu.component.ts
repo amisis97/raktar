@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Database } from 'src/app/database.service';
-import { User } from 'firebase';
+import { Router } from '@angular/router';
+import { User } from 'src/app/interfaces/User';
+import firebase from 'firebase';
 
 @Component({
   selector: 'app-menu',
@@ -10,15 +12,31 @@ import { User } from 'firebase';
 })
 export class MenuComponent implements OnInit {
 
-  user: any;
+  @Input()
+  hideProfile: boolean;
+
+  user: User;
+  userImg: string;
 
   constructor(
     private authService: AuthService,
     private db: Database,
+    public router: Router
   ) {
+  }
+
+  ngOnInit() {
     this.db.getUser(this.authService.getUserId).subscribe(user => {
-      this.user = user;
-      console.log(user);
+      const tempUser = user as User;
+      if (typeof(tempUser.img) !== 'undefined') {
+        const storage = firebase.storage();
+        storage.refFromURL(tempUser.img).getDownloadURL().then(url => {
+          tempUser.img = url;
+        });
+      } else {
+        tempUser.img = 'assets/user.svg';
+      }
+      this.user = tempUser;
     });
   }
 
@@ -61,14 +79,6 @@ export class MenuComponent implements OnInit {
       icon: 'equalizer'
     },
   ];
-
-  ngOnInit() {
-
-  }
-
-  getCurrentUser() {
-
-  }
 
   logout() {
     this.authService.logout();

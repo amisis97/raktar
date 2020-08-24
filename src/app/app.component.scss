@@ -5,12 +5,14 @@
   background-color: $sideNavBgColor;
   color: $sideNavColor;
   transition: width .5s ease-in-out;
+  overflow: hidden;
 }
 #leftMenu.small {
   width: 54px;
 }
 #mainPanel {
   height: $navbarHeight;
+  transition: all .5s ease-in-out;
 }
 #leftMenu .change-view {
   position: absolute;
@@ -18,4 +20,10 @@
   right: 10px;
   font-size: 40px;
   cursor: pointer;
+  z-index: 2;
+  transition: all .5s ease-in-out;
+}
+#leftMenu.small .change-view {
+  position: relative;
+  padding: 17px;
 }
