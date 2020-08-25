@@ -12,6 +12,7 @@ import { Area } from './interfaces/Area';
 import { Sell } from './interfaces/Sell';
 import { Buy } from './interfaces/Buy';
 import { Warehouse } from './interfaces/Warehouse';
+import { Worker } from './interfaces/Worker';
 
 @Injectable({
   providedIn: 'root'
@@ -169,7 +170,7 @@ export class Database {
     }
 
     addWorker(worker: Worker) {
-      this.db.collection('workers').add(worker);
+      this.db.collection('workers').doc(worker.wID).set(worker);
     }
 
     // Bevetelezes

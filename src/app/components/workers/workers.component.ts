@@ -3,6 +3,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import { Product } from 'src/app/interfaces/Product';
+import { Worker } from 'src/app/interfaces/Worker';
+import firebase from 'firebase';
 
 @Component({
   selector: 'app-workers',
@@ -82,11 +84,16 @@ export class WorkersComponent implements OnInit {
   }
 
   createWorker = (whFormValue: Worker) => {
-    this.db.addWorker(whFormValue);
-    this.snackBar.open('Sikeres hozzáadás!', null, {
-      duration: 2000,
+    // this.db.addWorker(whFormValue);
+    firebase.auth().createUserWithEmailAndPassword(whFormValue.email, whFormValue.password).then(resp => {
+      const tempWorker = whFormValue;
+      tempWorker.wID = resp.user.uid;
+      this.db.addWorker(tempWorker);
+      this.snackBar.open('Sikeres hozzáadás!', null, {
+        duration: 2000,
+      });
+      this.whForm.reset();
     });
-    this.whForm.reset();
   }
 
   createList = (whFormValue) => {

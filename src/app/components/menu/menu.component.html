@@ -1,8 +1,6 @@
 <div id="menu">
   <div *ngIf="!hideProfile" class="profile">
-    <div class="profile-img">
-      <img *ngIf="user" src="{{user.img}}">
-    </div>
+    <img *ngIf="user" class="profile-img" src="{{user.img}}">
     <div class="flex-break"></div>
     <span *ngIf="user">{{user.displayName}}</span>
   </div>

@@ -2,12 +2,12 @@
 $border-bottom: 1px solid #ccc;
 
 #menu .profile-img {
-  height: 40px;
-  width: 40px;
+  height: 70px;
+  width: 70px;
   background: #fff;
-  padding: 15px;
   border-radius: 50px;
   margin-bottom: 20px;
+  object-fit: cover;
 }
 #menu .profile {
   display: flex;
