@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
-import { LoginGuardSerive } from './auth/login-guard.service';
+import { LoginGuardService } from './auth/login-guard.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './pages/home/home.component';
 import { WarehousePageComponent } from './pages/warehouse-page/warehouse-page.component';
@@ -14,16 +14,16 @@ import { ReceiptsPageComponent } from './pages/receipts-page/receipts-page.compo
 
 const routes: Routes = [
   // { path: '', component: LoginComponent },
-  { path: '', component: HomeComponent, canActivate: [LoginGuardSerive] },
-  { path: 'raktar', component: WarehousePageComponent, canActivate: [LoginGuardSerive] },
-  { path: 'partners', component: PartnersPageComponent, canActivate: [LoginGuardSerive] },
-  { path: 'products', component: ProductsPageComponent, canActivate: [LoginGuardSerive] },
-  { path: 'workers', component: WorkersPageComponent, canActivate: [LoginGuardSerive] },
-  { path: 'receipts', component: ReceiptsPageComponent, canActivate: [LoginGuardSerive] },
-  { path: 'stat', component: StatPageComponent, canActivate: [LoginGuardSerive] },
-  { path: 'home', component: HomeComponent, canActivate: [LoginGuardSerive] },
+  { path: '', component: HomeComponent, canActivate: [LoginGuardService] },
+  { path: 'raktar', component: WarehousePageComponent, canActivate: [LoginGuardService] },
+  { path: 'partners', component: PartnersPageComponent, canActivate: [LoginGuardService] },
+  { path: 'products', component: ProductsPageComponent, canActivate: [LoginGuardService] },
+  { path: 'workers', component: WorkersPageComponent, canActivate: [LoginGuardService] },
+  { path: 'receipts', component: ReceiptsPageComponent, canActivate: [LoginGuardService] },
+  { path: 'stat', component: StatPageComponent, canActivate: [LoginGuardService] },
+  { path: 'home', component: HomeComponent, canActivate: [LoginGuardService] },
   { path: 'login', component: LoginComponent },
-  { path: '**', component: HomeComponent, canActivate: [LoginGuardSerive] },
+  { path: '**', component: HomeComponent, canActivate: [LoginGuardService] },
 ];
 
 @NgModule({

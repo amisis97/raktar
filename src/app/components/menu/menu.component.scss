@@ -32,6 +32,9 @@ $border-bottom: 1px solid #ccc;
   background-color: #273238;
   cursor: pointer;
 }
+#menu .menu-item.hide {
+  display: none;
+}
 #menu .menu-item a,
 #menu .menu-item a:hover,
 #menu .menu-item a:active,

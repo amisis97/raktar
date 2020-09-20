@@ -4,11 +4,13 @@
     <div class="flex-break"></div>
     <span *ngIf="user">{{user.displayName}}</span>
   </div>
-  <div class="menu-item" [class.active]="menu.url === router.url" *ngFor="let menu of menuItems">
-    <a [routerLink]="[menu.url]">
-      <i class="material-icons">{{menu.icon}}</i>
-      <span>{{menu.title}}</span>
-    </a>
+  <div class="menu-item" [class.hide]="!menu.visibility.includes(user.role)" [class.active]="menu.url === router.url" *ngFor="let menu of menuItems">
+    <ng-container *ngIf="menu.visibility.includes(user.role)">
+      <a [routerLink]="[menu.url]">
+        <i class="material-icons">{{menu.icon}}</i>
+        <span>{{menu.title}}</span>
+      </a>
+    </ng-container>
   </div>
   <div *ngIf="isLoggedIn" class="menu-item active">
     <a (click)="logout()">

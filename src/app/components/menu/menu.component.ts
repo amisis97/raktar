@@ -12,12 +12,6 @@ import firebase from 'firebase';
 })
 export class MenuComponent implements OnInit {
 
-  @Input()
-  hideProfile: boolean;
-
-  user: User;
-  userImg: string;
-
   constructor(
     private authService: AuthService,
     private db: Database,
@@ -25,10 +19,63 @@ export class MenuComponent implements OnInit {
   ) {
   }
 
+  @Input()
+  hideProfile: boolean;
+
+  user: User;
+  userImg: string;
+
+  isLoggedIn = this.authService.isLoggedIn;
+
+  menuItems = [
+    {
+      title: 'Kezdőlap',
+      url: '/home',
+      icon: 'home',
+      visibility: ['admin', 'worker']
+    },
+    {
+      title: 'Partnerek',
+      url: '/partners',
+      icon: 'supervised_user_circle',
+      visibility: ['admin', 'worker']
+    },
+    {
+      title: 'Raktár',
+      url: '/raktar',
+      icon: 'domain',
+      visibility: ['admin']
+    },
+    {
+      title: 'Termékek',
+      url: '/products',
+      icon: 'category',
+      visibility: ['admin', 'worker']
+    },
+    {
+      title: 'Bevételezés',
+      url: '/receipts',
+      icon: 'add_box',
+      visibility: ['admin', 'worker']
+    },
+    {
+      title: 'Raktárosok',
+      url: '/workers',
+      icon: 'transfer_within_a_station',
+      visibility: ['admin']
+    },
+    {
+      title: 'Statisztika',
+      url: '/stat',
+      icon: 'equalizer',
+      visibility: ['admin']
+    },
+  ];
+
   ngOnInit() {
     this.db.getUser(this.authService.getUserId).subscribe(user => {
       const tempUser = user as User;
-      if (typeof(tempUser.img) !== 'undefined') {
+      if (typeof(tempUser.img) !== 'undefined' && tempUser.img !== '') {
         const storage = firebase.storage();
         storage.refFromURL(tempUser.img).getDownloadURL().then(url => {
           tempUser.img = url;
@@ -39,46 +86,6 @@ export class MenuComponent implements OnInit {
       this.user = tempUser;
     });
   }
-
-  isLoggedIn = this.authService.isLoggedIn;
-
-  menuItems = [
-    {
-      title: 'Kezdőlap',
-      url: '/home',
-      icon: 'home'
-    },
-    {
-      title: 'Partnerek',
-      url: '/partners',
-      icon: 'supervised_user_circle'
-    },
-    {
-      title: 'Raktár',
-      url: '/raktar',
-      icon: 'domain'
-    },
-    {
-      title: 'Termékek',
-      url: '/products',
-      icon: 'category'
-    },
-    {
-      title: 'Bevételezés',
-      url: '/receipts',
-      icon: 'add_box'
-    },
-    {
-      title: 'Raktárosok',
-      url: '/workers',
-      icon: 'transfer_within_a_station'
-    },
-    {
-      title: 'Statisztika',
-      url: '/stat',
-      icon: 'equalizer'
-    },
-  ];
 
   logout() {
     this.authService.logout();

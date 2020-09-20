@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { User } from 'firebase';
+import { User } from './interfaces/User';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -34,6 +34,10 @@ export class Database {
     getUser(id: string) {
       const c = 'users/' + id;
       return this.db.doc(c).valueChanges();
+    }
+
+    addUser(user: User) {
+      this.db.collection('users').doc(user.id).set(user);
     }
 
     // Todo metodusok

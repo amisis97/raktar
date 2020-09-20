@@ -12,7 +12,8 @@ import { LoginComponent } from './auth/login/login.component';
 // Form
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './auth/auth.service';
-import { LoginGuardSerive } from './auth/login-guard.service';
+import { LoginGuardService } from './auth/login-guard.service';
+import { VisibilityService } from './auth/visibility.service';
 import { MenuComponent } from './components/menu/menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Material
@@ -111,7 +112,8 @@ import { ReceiptsComponent, MatPaginatorIntlHu } from './components/receipts/rec
   ],
   providers: [
     AuthService,
-    LoginGuardSerive,
+    LoginGuardService,
+    VisibilityService,
     Database,
     AngularFirestore,
     MatDatepickerModule,
