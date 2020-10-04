@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatPaginatorIntl } from '@angular/material';
 import { AuthService } from './auth/auth.service';
 
 @Component({
@@ -35,4 +36,12 @@ export function sameDay(d1: Date, d2: Date) {
   return d1.getFullYear() === d2.getFullYear() &&
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
+}
+
+export class MatPaginatorIntlHu extends MatPaginatorIntl {
+  itemsPerPageLabel = 'Oldalméret';
+  nextPageLabel     = 'Következő oldal';
+  previousPageLabel = 'Előző oldal';
+  lastPageLabel = 'Utolsó oldal';
+  firstPageLabel = 'Első oldal';
 }

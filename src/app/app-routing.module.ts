@@ -10,6 +10,8 @@ import { ProductsPageComponent } from './pages/products-page/products-page.compo
 import { WorkersPageComponent } from './pages/workers-page/workers-page.component';
 import { StatPageComponent } from './pages/stat-page/stat-page.component';
 import { ReceiptsPageComponent } from './pages/receipts-page/receipts-page.component';
+import { VisibilityService } from './auth/visibility.service';
+import { SellPageComponent } from './pages/sell-page/sell-page.component';
 
 
 const routes: Routes = [
@@ -18,9 +20,10 @@ const routes: Routes = [
   { path: 'raktar', component: WarehousePageComponent, canActivate: [LoginGuardService] },
   { path: 'partners', component: PartnersPageComponent, canActivate: [LoginGuardService] },
   { path: 'products', component: ProductsPageComponent, canActivate: [LoginGuardService] },
-  { path: 'workers', component: WorkersPageComponent, canActivate: [LoginGuardService] },
+  { path: 'workers', component: WorkersPageComponent, canActivate: [LoginGuardService, VisibilityService] },
   { path: 'receipts', component: ReceiptsPageComponent, canActivate: [LoginGuardService] },
-  { path: 'stat', component: StatPageComponent, canActivate: [LoginGuardService] },
+  { path: 'sell', component: SellPageComponent, canActivate: [LoginGuardService] },
+  { path: 'stat', component: StatPageComponent, canActivate: [LoginGuardService, VisibilityService] },
   { path: 'home', component: HomeComponent, canActivate: [LoginGuardService] },
   { path: 'login', component: LoginComponent },
   { path: '**', component: HomeComponent, canActivate: [LoginGuardService] },

@@ -7,7 +7,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent, MatPaginatorIntlHu } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 // Form
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -46,7 +46,9 @@ import { StatPageComponent } from './pages/stat-page/stat-page.component';
 import { BuyStatComponent } from './components/buy-stat/buy-stat.component';
 import { SellStatComponent } from './components/sell-stat/sell-stat.component';
 import { ReceiptsPageComponent } from './pages/receipts-page/receipts-page.component';
-import { ReceiptsComponent, MatPaginatorIntlHu } from './components/receipts/receipts.component';
+import { ReceiptsComponent } from './components/receipts/receipts.component';
+import { SellComponent } from './components/sell/sell.component';
+import { SellPageComponent } from './pages/sell-page/sell-page.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +74,9 @@ import { ReceiptsComponent, MatPaginatorIntlHu } from './components/receipts/rec
     BuyStatComponent,
     SellStatComponent,
     ReceiptsPageComponent,
-    ReceiptsComponent
+    ReceiptsComponent,
+    SellComponent,
+    SellPageComponent
   ],
   entryComponents: [
     DialogDetails,

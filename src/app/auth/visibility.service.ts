@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
 import { Database } from '../database.service';
 import { User } from '../interfaces/User';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class VisibilityService implements CanActivate {
@@ -12,19 +13,17 @@ export class VisibilityService implements CanActivate {
     private db: Database
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const loggedIn = this.authService.isLoggedIn;
-    if (loggedIn) {
+  canActivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return new Promise((resolve, reject) => {
       this.db.getUser(this.authService.getUserId).subscribe(user => {
         const tempUser = user as User;
-        if( [].includes(tempUser.role)) {
-          return true;
+        if (tempUser.role.trim() === 'admin') {
+          resolve(true);
         } else {
           this.router.navigate(['/home']);
-          return false;
+          resolve(false);
         }
       });
-    }
-    return false;
+    });
   }
 }

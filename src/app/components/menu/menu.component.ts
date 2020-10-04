@@ -59,6 +59,12 @@ export class MenuComponent implements OnInit {
       visibility: ['admin', 'worker']
     },
     {
+      title: 'Eladás',
+      url: '/sell',
+      icon: 'shop',
+      visibility: ['admin', 'worker']
+    },
+    {
       title: 'Raktárosok',
       url: '/workers',
       icon: 'transfer_within_a_station',
@@ -73,6 +79,7 @@ export class MenuComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.user = null;
     this.db.getUser(this.authService.getUserId).subscribe(user => {
       const tempUser = user as User;
       if (typeof(tempUser.img) !== 'undefined' && tempUser.img !== '') {

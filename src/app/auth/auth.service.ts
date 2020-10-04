@@ -4,6 +4,7 @@ import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { User } from 'firebase';
 import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService {
 
   user: User;
 
-  constructor(public afAuth: AngularFireAuth, private router: Router) {
+  constructor(public afAuth: AngularFireAuth, private router: Router, private snackBar: MatSnackBar) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.user = user;
@@ -24,8 +25,26 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    const result = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-    window.location.replace('/home');
+    const result = await this.afAuth.auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      this.snackBar.open('Sikeres bejelentkezés!', null, {
+        duration: 1000,
+      }).afterDismissed().subscribe(() => {
+        window.location.replace('/home');
+      });
+    })
+    .catch((error) => {
+      let errorStr = '';
+      if (error.code === 'auth/wrong-password') {
+        errorStr = 'Hibás email cím vagy jelszó!';
+      } else if (error.code === 'auth/user-not-found') {
+        errorStr = 'A megadott email cím nem található!';
+      }
+      errorStr += ' Próbáld újra!';
+      this.snackBar.open(errorStr, null, {
+        duration: 2000,
+      });
+    });
   }
 
   async logout() {

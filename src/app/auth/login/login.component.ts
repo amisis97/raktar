@@ -30,7 +30,6 @@ export class InputErrorStateMatcherExample {
   styleUrls: ['login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
   loading = false;
   submitted = false;
   returnUrl: string;
@@ -39,21 +38,23 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {
-    // redirect to home if already logged in
-    /*if (this.authenticationService.currentUserValue) {
-      this.router.navigate(['/']);
-    }*/
-  }
-
-  username: string;
-  password: string;
+  ) { }
+  loginForm: FormGroup = new FormGroup({
+    username: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+  });
 
   ngOnInit() {
   }
 
   login(): void {
-    this.authService.login(this.username, this.password);
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value.username, this.loginForm.value.password);
+    }
+  }
+
+  hasError = (controlName: string, errorName: string) => {
+    return this.loginForm.controls[controlName].hasError(errorName);
   }
 
   logoutBtn() {

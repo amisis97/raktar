@@ -1,21 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Product } from 'src/app/interfaces/Product';
-import { MatTableDataSource, MatSnackBar, MatDialog, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, MatSnackBar, MatDialog } from '@angular/material';
+import { firestore } from 'firebase';
 import { Database } from 'src/app/database.service';
-import { Sell } from 'src/app/interfaces/Sell';
 import { Buy } from 'src/app/interfaces/Buy';
 import { Partner } from 'src/app/interfaces/Partner';
-import { firestore } from 'firebase';
+import { Product } from 'src/app/interfaces/Product';
 
 @Component({
-  selector: 'app-receipts',
-  templateUrl: './receipts.component.html',
-  styleUrls: ['./receipts.component.scss']
+  selector: 'app-sell',
+  templateUrl: './sell.component.html',
+  styleUrls: ['./sell.component.scss']
 })
-export class ReceiptsComponent implements OnInit {
+export class SellComponent implements OnInit {
 
-  title = 'Új bevételezés és termékbeszerzési előzmények';
+  title = 'Vevői megrendelések és előzmények';
   public whForm: FormGroup;
   displayedColumns: string[] = ['bID', 'date', 'product', 'seller', 'stock',  'allprice'];
   elements: Buy[] = [];

@@ -2,27 +2,18 @@
   <mat-card class="login-card">
     <h2>Bejelentkezés</h2>
     <mat-card-content>
-      <form class="example-form">
-        <table class="full-width" cellspacing="0">
-          <tr>
-            <td>
-              <mat-form-field class="full-width">
-                <input matInput placeholder="Email" [(ngModel)]="username" name="username" required>
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <mat-form-field class="full-width">
-                <input matInput placeholder="Jelszó" [(ngModel)]="password" type="password" name="password" required>
-              </mat-form-field>
-            </td>
-          </tr>
-        </table>
+      <form [formGroup]="loginForm" class="loginForm" (ngSubmit)="login()">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Email" formControlName="username">
+            <mat-error *ngIf="hasError('username', 'required')">Email cím megadása kötelező</mat-error>
+            <mat-error *ngIf="hasError('username', 'email')">Email cím formátuma rossz</mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Jelszó" type="password" formControlName="password">
+            <mat-error *ngIf="hasError('password', 'required')">Jelszó megadása kötelező</mat-error>
+          </mat-form-field>
+        <button [disabled]="!loginForm.valid" type="submit" mat-raised-button color="primary">Bejelentkezés</button>
       </form>
     </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button (click)="login()" color="primary">Bejelentkezés</button>
-    </mat-card-actions>
   </mat-card>
 </div>
