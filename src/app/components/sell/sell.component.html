@@ -1,1 +1,76 @@
-<p>sell works!</p>
+<h2 class="title">{{title}}</h2>
+
+<mat-form-field>
+  <mat-label>Kereső</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="keresés...">
+</mat-form-field>
+<div class="warehouse-table-container mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="desc" class="sells-table">
+    <ng-container matColumnDef="sID">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Azonosító</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.sID">{{element.sID}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Dátum</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.date">{{element.date.toDate().toDateString()}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="products">
+      <th mat-header-cell *matHeaderCellDef>Termék(ek)</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.productsObj"><p *ngFor="let product of element.productsObj">{{product.name}} ({{product.productNr}}) - {{product.stock}} {{product.unit}}</p></div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="buyer">
+      <th mat-header-cell *matHeaderCellDef>Vásárló</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.partner"><a [routerLink]="['/partners']">{{element.partner.name}}</a></div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Végösszeg</th>
+      <td mat-cell *matCellDef="let element">
+        <div *ngIf="element.total">{{element.total}}</div>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
+</div>
+
+<!-- Új bevét -->
+<mat-expansion-panel class="add-new-area">
+  <mat-expansion-panel-header>Új eladás</mat-expansion-panel-header>
+  <form [formGroup]="whForm" autocomplete="off" novalidate (ngSubmit)="createSell(whForm.value)"
+    fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <div class="flex">
+      <mat-form-field>
+        <mat-label>Vásárló</mat-label>
+        <mat-select formControlName="buyerId" placeholder="" [(value)]="selectedPartner">
+          <mat-option value="{{buyer.pID}}" *ngFor="let buyer of buyers">{{buyer.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="hasError('buyerId', 'required')">Vásárló megadása kötelező</mat-error>
+      </mat-form-field>
+      <button (click)="addProduct($event)" mat-raised-button color="primary">Termék hozzáadása</button>
+    </div>
+    <div *ngFor="let control of productsInput.controls; index as i">
+      <ng-container [formGroup]="productsInput.controls[i]">
+        <mat-form-field>
+          <mat-label>Termék</mat-label>
+          <mat-select formControlName="product" placeholder="">
+            <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}} ({{product.productNr}})</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Mennyiség</mat-label>
+          <input matInput formControlName="count" type="number" placeholder="" value="" min="1">
+        </mat-form-field>
+      </ng-container>
+    </div>
+    <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>
+  </form>
+</mat-expansion-panel>

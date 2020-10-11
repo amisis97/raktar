@@ -192,6 +192,12 @@ export class Database {
       this.db.collection('buy').add(b);
     }
 
+    // Eladasok
+
+    getSells() {
+      return this.db.collection('sell').valueChanges({idField: 'sID'});
+    }
+
     // Statisztika
 
     getBuyStat() {
