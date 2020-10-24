@@ -126,7 +126,7 @@ export class Database {
     editProduct(pId: string, product: Product) {
       console.log(product);
       const c = 'products/' + pId;
-      this.db.doc(c).update(product);
+      return this.db.doc(c).update(product);
     }
 
     // Partnerek metodusok
@@ -196,6 +196,10 @@ export class Database {
 
     getSells() {
       return this.db.collection('sell').valueChanges({idField: 'sID'});
+    }
+
+    addSell(sell) {
+      this.db.collection('sell').add(sell);
     }
 
     // Statisztika

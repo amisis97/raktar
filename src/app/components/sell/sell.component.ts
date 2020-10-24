@@ -81,18 +81,6 @@ export class SellComponent implements OnInit {
     });
   }
 
-  /*changePartner(value) {
-    this.db.getProducts().subscribe(products => {
-      this.products = [];
-      products.forEach(p => {
-        const temp = p as Product;
-        if (temp.supplier === value) {
-          this.products.push(temp);
-        }
-      });
-    });
-  }*/
-
   changeProduct(value) {
     this.db.getProduct(value).subscribe(product => {
       const temp = product as Product;
@@ -118,30 +106,28 @@ export class SellComponent implements OnInit {
   }
 
   createSell = (whFormValue) => {
-    console.log(whFormValue);
-    /*let total = 0;
-    let products = [];
-    whFormValue.products.forEach(p => {
-      total += p.price;
-      products.push({
-        product: p.pID
+    const prods = [];
+    for (const prod of whFormValue.products) {
+      const tempProd = this.products.find(p => p.pID === prod.product);
+      tempProd.stock -= prod.count;
+      this.db.editProduct(prod.product, tempProd);
+      const totalProdPrice = tempProd.price * prod.count;
+      prods.push({
+        count: prod.count,
+        price: totalProdPrice,
+        productId: prod.product,
       });
-    });
+    }
     const data = {
       buyer: whFormValue.buyerId,
       date: firestore.Timestamp.now(),
-      products:
-    };*/
-    /*if (this.selectedProductObj) {
-      const newTemp = this.selectedProductObj;
-      newTemp.stock += whFormValue.stock;
-      this.db.editProduct(this.selectedProduct, newTemp);
-      this.db.addReceipt(whFormValue);
-    }
+      products: prods
+    };
     this.whForm.reset();
-    this.snackBar.open('A termék bevételezve lett a raktárba!', null, {
+    this.db.addSell(data);
+    this.snackBar.open('A termék sikeresen eladva!', null, {
       duration: 2000,
-    });*/
+    });
   }
 
 }
