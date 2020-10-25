@@ -69,6 +69,7 @@
           <mat-label>Mennyiség</mat-label>
           <input matInput formControlName="count" type="number" placeholder="" value="" min="1">
         </mat-form-field>
+        <button *ngIf="i > 0" mat-raised-button color="primary" (click)="removeProduct($event, i)">Tétel törlése</button>
       </ng-container>
     </div>
     <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>

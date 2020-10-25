@@ -1,1 +1,28 @@
-<p>buy-stat works!</p>
+<h2 class="title">{{title}}</h2>
+
+<mat-form-field>
+  <mat-label>Termék</mat-label>
+  <mat-select (selectionChange)="changeProduct($event.value)" placeholder="" [(value)]="selectedProductsId" multiple>
+    <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}} ({{product.productNr}})</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Kezdő dátum</mat-label>
+  <input matInput [matDatepicker]="picker" placeholder="Válassz egy dátumot" (dateChange)="changeFromDate($event)">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+
+
+
+<div style="width: 100%;">
+  <canvas
+      baseChart
+      [chartType]="'line'"
+      [datasets]="chartData"
+      [labels]="chartLabels"
+      [options]="chartOptions"
+      [legend]="true">
+  </canvas>
+</div>

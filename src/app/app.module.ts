@@ -50,6 +50,8 @@ import { ReceiptsComponent } from './components/receipts/receipts.component';
 import { SellComponent } from './components/sell/sell.component';
 import { SellPageComponent } from './pages/sell-page/sell-page.component';
 
+import { ChartsModule, ThemeService } from 'ng2-charts';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -112,7 +114,8 @@ import { SellPageComponent } from './pages/sell-page/sell-page.component';
     MatOptionModule,
     MatListModule,
     MatSortModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    ChartsModule,
   ],
   providers: [
     AuthService,
@@ -123,6 +126,7 @@ import { SellPageComponent } from './pages/sell-page/sell-page.component';
     MatDatepickerModule,
     MatNativeDateModule,
     [{ provide: MatPaginatorIntl, useClass: MatPaginatorIntlHu}],
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })

@@ -105,11 +105,22 @@ export class SellComponent implements OnInit {
     }));
   }
 
+  removeProduct(e, index) {
+    e.preventDefault();
+    this.productsInput.removeAt(index);
+  }
+
   createSell = (whFormValue) => {
     const prods = [];
     for (const prod of whFormValue.products) {
       const tempProd = this.products.find(p => p.pID === prod.product);
       tempProd.stock -= prod.count;
+      if (tempProd.stock < 0) {
+        this.snackBar.open(`Nincs készleten az alábbi termék: ${tempProd.name} (${tempProd.productNr})`, null, {
+          duration: 2000,
+        });
+        return;
+      }
       this.db.editProduct(prod.product, tempProd);
       const totalProdPrice = tempProd.price * prod.count;
       prods.push({

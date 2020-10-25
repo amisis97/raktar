@@ -3,6 +3,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Sell } from 'src/app/interfaces/Sell';
 import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { Database } from 'src/app/database.service';
+import { Product } from 'src/app/interfaces/Product';
+import { Buy } from 'src/app/interfaces/Buy';
+import firebase from 'firebase';
+import { toDateString } from 'src/app/app.component';
 
 @Component({
   selector: 'app-buy-stat',
@@ -12,12 +16,17 @@ import { Database } from 'src/app/database.service';
 
 export class BuyStatComponent implements OnInit {
 
-  title = 'Vásárlók és beszállítók adatai';
-  public whForm: FormGroup;
-  displayedColumns: string[] = ['name', 'area', 'productNr', 'stock', 'unit', 'purchasePrice', 'price', 'supplier'];
-  elements: Sell[] = [];
-  dataSource = new MatTableDataSource(this.elements);
-  selectedElement = null;
+  title = 'Bevételezés statisztika';
+  toDate = new Date();
+  fromDate = new Date();
+  chartOptions = {
+    responsive: true
+  };
+  chartData = [];
+  chartLabels = [];
+  selectedProductsId: string[] = [];
+  products: Product[] = [];
+  buyes: Buy[] = [];
 
   constructor(
     private db: Database,
@@ -26,53 +35,59 @@ export class BuyStatComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.db.getReceipts().subscribe(products => {
-      //this.elements = products as Sell[];
-      /*this.elements.forEach(e => {
-        const areaKey = e.area;
-        const suppKey = e.supplier;
-        e.area = null;
-        e.supplier = null;
-        this.db.getArea(areaKey).subscribe(area => {
-          const temp = area as Area;
-          e.area = temp.name;
-        });
-        this.db.getPartner(suppKey).subscribe(partner => {
-          const temp = partner as Partner;
-          e.supplier = temp.name;
-        });
-      });*/
-      this.dataSource = new MatTableDataSource(this.elements);
+    this.fromDate.setMonth(this.toDate.getMonth() - 1);
+    this.changeChartLabel();
+    this.db.getProducts().subscribe(response => {
+      this.products = response as Product[];
     });
-
-    this.whForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      country: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      city: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      address: new FormControl('', [Validators.required, Validators.minLength(2)]),
-      customer: new FormControl(''),
-      suppliers: new FormControl('')
+    this.db.getBuyes().subscribe(response => {
+      this.buyes = response as Buy[];
     });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  getDaysArray = (start, end) => {
+    const arr = [];
+    for (const dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+        arr.push(toDateString(new Date(dt)));
+    }
+    return arr;
   }
 
-  openDialog(element: Sell): void {
-    console.log('not work');
+
+  reRenderChart() {
+    this.chartData = [];
+    this.selectedProductsId.forEach(prod => {
+      const prodData = [];
+      this.chartLabels.forEach(date => {
+        const buy = this.buyes.find(function (b) {
+            const tempDate = toDateString(b.date.toDate());
+            return tempDate === date && prod === b.productId;
+          });
+        if (typeof(buy) !== 'undefined') {
+          prodData.push(buy.stock);
+        } else {
+          prodData.push(0);
+        }
+      });
+      const tempProd = this.products.find(p => p.pID === prod);
+      this.chartData.push({
+        label: `${tempProd.name} (${tempProd.productNr})`,
+        data: prodData
+      });
+    });
   }
 
-  hasError = (controlName: string, errorName: string) => {
-    return this.whForm.controls[controlName].hasError(errorName);
+  changeProduct(value) {
+    this.selectedProductsId = value;
+    this.reRenderChart();
   }
 
-  getDiagramFromReceipts(receipts: Sell[]) {
-
+  changeChartLabel() {
+    this.chartLabels = this.getDaysArray(this.fromDate, this.toDate);
   }
 
-  getAllData() {
+  changeFromDate(event) {
+    this.fromDate = new Date(event.value);
 
   }
 

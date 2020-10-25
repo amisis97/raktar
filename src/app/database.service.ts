@@ -204,7 +204,7 @@ export class Database {
 
     // Statisztika
 
-    getBuyStat() {
+    getBuyes() {
       return this.db.collection('buy').valueChanges({idField: 'bID'});
     }
 

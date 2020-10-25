@@ -38,6 +38,10 @@ export function sameDay(d1: Date, d2: Date) {
     d1.getDate() === d2.getDate();
 }
 
+export function toDateString(date: Date) {
+  return date.toISOString().split('T')[0];
+}
+
 export class MatPaginatorIntlHu extends MatPaginatorIntl {
   itemsPerPageLabel = 'Oldalméret';
   nextPageLabel     = 'Következő oldal';
