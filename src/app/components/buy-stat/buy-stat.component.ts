@@ -45,7 +45,7 @@ export class BuyStatComponent implements OnInit {
     });
   }
 
-  getDaysArray = (start, end) => {
+  getDaysArray = (start: Date, end: Date) => {
     const arr = [];
     for (const dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
         arr.push(toDateString(new Date(dt)));
@@ -59,8 +59,8 @@ export class BuyStatComponent implements OnInit {
     this.selectedProductsId.forEach(prod => {
       const prodData = [];
       this.chartLabels.forEach(date => {
-        const buy = this.buyes.find(function (b) {
-            const tempDate = toDateString(b.date.toDate());
+        const buy = this.buyes.find((b) => {
+            const tempDate = b.date ? toDateString(b.date.toDate()) : null;
             return tempDate === date && prod === b.productId;
           });
         if (typeof(buy) !== 'undefined') {
@@ -70,10 +70,12 @@ export class BuyStatComponent implements OnInit {
         }
       });
       const tempProd = this.products.find(p => p.pID === prod);
-      this.chartData.push({
-        label: `${tempProd.name} (${tempProd.productNr})`,
-        data: prodData
-      });
+      if (tempProd) {
+        this.chartData.push({
+          label: `${tempProd.name} (${tempProd.productNr})`,
+          data: prodData
+        });
+      }
     });
   }
 
@@ -84,11 +86,7 @@ export class BuyStatComponent implements OnInit {
 
   changeChartLabel() {
     this.chartLabels = this.getDaysArray(this.fromDate, this.toDate);
-  }
-
-  changeFromDate(event) {
-    this.fromDate = new Date(event.value);
-
+    this.reRenderChart();
   }
 
 }

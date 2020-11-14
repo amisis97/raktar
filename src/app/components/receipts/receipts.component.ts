@@ -69,7 +69,6 @@ export class ReceiptsComponent implements OnInit {
       sellerId: new FormControl('', [Validators.required, Validators.minLength(2)]),
       productId: new FormControl('', [Validators.required, Validators.minLength(2)]),
       stock: new FormControl('', [Validators.required, Validators.minLength(2), Validators.min(1)]),
-      date: new FormControl(firestore.Timestamp.now())
     });
   }
 
@@ -106,6 +105,7 @@ export class ReceiptsComponent implements OnInit {
       const newTemp = this.selectedProductObj;
       newTemp.stock += whFormValue.stock;
       this.db.editProduct(this.selectedProduct, newTemp);
+      whFormValue.date = firestore.Timestamp.now();
       this.db.addReceipt(whFormValue);
     }
     this.whForm.reset();

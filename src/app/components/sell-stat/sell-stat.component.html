@@ -1,1 +1,35 @@
-<p>sell-stat works!</p>
+<h2 class="title">{{title}}</h2>
+
+<mat-form-field>
+  <mat-label>Termék</mat-label>
+  <mat-select (selectionChange)="changeProduct($event.value)" placeholder="" [(value)]="selectedProductsId" multiple>
+    <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}} ({{product.productNr}})</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Kezdő dátum</mat-label>
+  <input matInput [value]="fromDate" [(ngModel)]="fromDate" [matDatepicker]="pickerMin" [max]="toDate" placeholder="Válassz egy dátumot" (dateChange)="changeChartLabel()">
+  <mat-datepicker-toggle matSuffix [for]="pickerMin"></mat-datepicker-toggle>
+  <mat-datepicker #pickerMin></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Vége dátum</mat-label>
+  <input matInput [value]="toDate" [(ngModel)]="toDate" [matDatepicker]="pickerMax" [min]="fromDate" placeholder="Válassz egy dátumot" (dateChange)="changeChartLabel()">
+  <mat-datepicker-toggle matSuffix [for]="pickerMax"></mat-datepicker-toggle>
+  <mat-datepicker #pickerMax></mat-datepicker>
+</mat-form-field>
+
+
+
+<div style="width: 100%;">
+  <canvas
+      baseChart
+      [chartType]="'line'"
+      [datasets]="chartData"
+      [labels]="chartLabels"
+      [options]="chartOptions"
+      [legend]="true">
+  </canvas>
+</div>
