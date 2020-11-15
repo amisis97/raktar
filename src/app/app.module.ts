@@ -41,7 +41,7 @@ import { PartnersPageComponent } from './pages/partners-page/partners-page.compo
 import { ProductsPageComponent } from './pages/products-page/products-page.component';
 import { ProductsComponent, ProductDialogDetails } from './components/products/products.component';
 import { WorkersPageComponent } from './pages/workers-page/workers-page.component';
-import { WorkersComponent } from './components/workers/workers.component';
+import { WorkerDialogDetails, WorkersComponent } from './components/workers/workers.component';
 import { StatPageComponent } from './pages/stat-page/stat-page.component';
 import { BuyStatComponent } from './components/buy-stat/buy-stat.component';
 import { SellStatComponent } from './components/sell-stat/sell-stat.component';
@@ -64,6 +64,7 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
     PartnerDialogDetails,
     ProductDialogDetails,
     WarehouseDialogDetails,
+    WorkerDialogDetails,
     PartnersComponent,
     WarehouseComponent,
     WarehousePageComponent,
@@ -84,7 +85,8 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
     DialogDetails,
     PartnerDialogDetails,
     ProductDialogDetails,
-    WarehouseDialogDetails
+    WarehouseDialogDetails,
+    WorkerDialogDetails
   ],
   imports: [
     BrowserModule,

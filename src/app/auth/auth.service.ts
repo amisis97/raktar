@@ -36,7 +36,7 @@ export class AuthService {
       if (error.code === 'auth/wrong-password') {
         errorStr = 'Hibás email cím vagy jelszó!';
       } else if (error.code === 'auth/user-not-found') {
-        errorStr = 'A megadott email cím nem található!';
+        errorStr = 'Hibás email cím vagy jelszó!';
       }
       errorStr += ' Próbáld újra!';
       this.snackBar.open(errorStr, null, {

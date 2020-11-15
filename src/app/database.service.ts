@@ -40,6 +40,11 @@ export class Database {
       this.db.collection('users').doc(user.id).set(user);
     }
 
+    editUser(userId: string, user: User) {
+      const c = 'users/' + userId;
+      this.db.doc(c).set(user);
+    }
+
     // Todo metodusok
 
     getTasks() {
@@ -124,7 +129,6 @@ export class Database {
     }
 
     editProduct(pId: string, product: Product) {
-      console.log(product);
       const c = 'products/' + pId;
       return this.db.doc(c).update(product);
     }
@@ -165,12 +169,13 @@ export class Database {
       return this.db.doc(c).valueChanges();
     }
 
-    deleteWorker(wID: string) {
+    /*deleteWorker(wID: string) {
 
-    }
+    }*/
 
-    editWorker(wID: string) {
-
+    editWorker(wID: string, worker: Worker) {
+      const c = 'workers/' + wID;
+      return this.db.doc(c).update(worker);
     }
 
     addWorker(worker: Worker) {

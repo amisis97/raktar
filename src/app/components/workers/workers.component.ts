@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
+import { MatTableDataSource, MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import { Product } from 'src/app/interfaces/Product';
 import { User } from 'src/app/interfaces/User';
 import { Worker } from 'src/app/interfaces/Worker';
 import firebase from 'firebase';
+import { Partner } from 'src/app/interfaces/Partner';
 
 @Component({
   selector: 'app-workers',
@@ -56,7 +57,14 @@ export class WorkersComponent implements OnInit {
   }
 
   openDialog(element: Worker): void {
-    console.log('not work');
+    this.db.getUser(element.wID).subscribe(u => {
+      const tempUser = u as User;
+      element.img = tempUser.img;
+      this.dialog.open(WorkerDialogDetails, {
+        width: '450px',
+        data: element
+      });
+    });
   }
 
   deleteWorker(workerId: string) {
@@ -114,4 +122,62 @@ export class WorkersComponent implements OnInit {
     this.addProducts.push('product' + this.addProducts.length);
   }
 
+}
+
+
+@Component({
+  selector: 'dialog-details',
+  templateUrl: './dialog-details.html',
+  styleUrls: ['./dialog-details.scss']
+})
+
+export class WorkerDialogDetails {
+
+  constructor(
+    public dialogRef: MatDialogRef<WorkerDialogDetails>,
+    private db: Database,
+    private snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: Worker) { }
+
+  public workerEditForm: FormGroup;
+
+  userProfile: User;
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  ngOnInit() {
+    this.workerEditForm = new FormGroup({
+      name: new FormControl(this.data.name, [Validators.required, Validators.minLength(2)]),
+      address: new FormControl(this.data.address, [Validators.required, Validators.minLength(2)]),
+      // img: new FormControl(this.data.img)
+    });
+  }
+
+  public hasError = (controlName: string, errorName: string) => {
+    return this.workerEditForm.controls[controlName].hasError(errorName);
+  }
+
+  public editWorker = (workerFormValue: any) => {
+    this.db.getWorker(this.data.wID).subscribe(w => {
+      if (w) {
+        const tempWorker = w as Worker;
+        tempWorker.name = workerFormValue.name;
+        tempWorker.address = workerFormValue.address;
+        this.db.editWorker(this.data.wID, tempWorker);
+      }
+    });
+    this.db.getUser(this.data.wID).subscribe(u => {
+     if (u) {
+      const tempUser = u as User;
+      tempUser.displayName = workerFormValue.name;
+      this.db.editUser(this.data.wID, tempUser);
+     }
+    });
+    this.dialogRef.close();
+    this.snackBar.open('Sikeres módosítás!', null, {
+      duration: 2000,
+    });
+  }
 }

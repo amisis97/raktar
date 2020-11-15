@@ -1,0 +1,20 @@
+<div *ngIf="this.data" class="selected-elem">
+  <h2>{{data.name}}</h2>
+  <form class="edit-form" [formGroup]="workerEditForm" autocomplete="off" novalidate (ngSubmit)="editWorker(workerEditForm.value)" fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
+    <mat-form-field class="name">
+      <mat-label>Név</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="hasError('name', 'required')">Név megadása kötelező</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Cím</mat-label>
+      <input matInput formControlName="address">
+      <mat-error *ngIf="hasError('address', 'required')">Cím megadása kötelező</mat-error>
+    </mat-form-field>
+    <!-- <mat-form-field>
+      <mat-label>Kép</mat-label>
+      <input matInput formControlName="img">
+    </mat-form-field> -->
+    <button mat-flat-button color="primary">Módosítás</button>
+  </form>
+</div>

@@ -4,4 +4,5 @@ export interface Worker {
   password: string;
   address: string;
   email: string;
+  img: string;
 }
