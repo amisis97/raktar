@@ -20,6 +20,7 @@ export class AppComponent {
   ngOnInit() {
     this.small = localStorage.getItem('view') ? JSON.parse(localStorage.view) : false;
     this.isLoggedIn = this.authService.isLoggedIn;
+    console.log(this.isLoggedIn);
     this.iconName = 'menu_open';
   }
 

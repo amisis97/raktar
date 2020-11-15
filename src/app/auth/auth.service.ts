@@ -28,7 +28,7 @@ export class AuthService {
       this.snackBar.open('Sikeres bejelentkezés!', null, {
         duration: 1000,
       }).afterDismissed().subscribe(() => {
-        window.location.replace('/home');
+        window.location.replace('home');
       });
     })
     .catch((error) => {
@@ -48,7 +48,7 @@ export class AuthService {
   async logout() {
     await this.afAuth.auth.signOut();
     localStorage.removeItem('user');
-    window.location.replace('/login');
+    window.location.replace('login');
   }
 
   getUser() {
