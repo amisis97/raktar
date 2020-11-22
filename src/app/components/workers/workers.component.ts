@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { MatTableDataSource, MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import { Product } from 'src/app/interfaces/Product';
@@ -7,6 +7,7 @@ import { User } from 'src/app/interfaces/User';
 import { Worker } from 'src/app/interfaces/Worker';
 import firebase from 'firebase';
 import { Partner } from 'src/app/interfaces/Partner';
+import { WorkerList } from 'src/app/interfaces/WorkerList';
 
 @Component({
   selector: 'app-workers',
@@ -17,13 +18,21 @@ export class WorkersComponent implements OnInit {
 
   title = 'Raktárosok és feladat kiadása';
   public whForm: FormGroup;
+  public listForm: FormGroup;
   displayedColumns: string[] = ['name', 'address', 'email', 'details', 'delete'];
   elements: Worker[] = [];
+  workerLists: WorkerList[] = [];
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
-  addProducts = [];
   products: Product[];
   selectedProduct = null;
+  selectedWorker = null;
+  selectedWorkerForList = null;
+  productsInput = new FormArray([new FormGroup({
+    product: new FormControl('', [Validators.required]),
+    count: new FormControl('', [Validators.required, Validators.minLength(1)])
+  })]);
+  selectWorkList: WorkerList;
 
   constructor(
     private db: Database,
@@ -42,6 +51,11 @@ export class WorkersComponent implements OnInit {
       address: new FormControl('', [Validators.required, Validators.minLength(5)]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
       email: new FormControl('', [Validators.required, Validators.minLength(3)])
+    });
+
+    this.listForm = new FormGroup({
+      wID: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      products: this.productsInput,
     });
 
     this.db.getProducts().subscribe(products => {
@@ -88,6 +102,10 @@ export class WorkersComponent implements OnInit {
     return this.whForm.controls[controlName].hasError(errorName);
   }
 
+  hasErrorListForm = (controlName: string, errorName: string) => {
+    return this.listForm.controls[controlName].hasError(errorName);
+  }
+
   editWorker(workerId: string) {
 
   }
@@ -113,15 +131,60 @@ export class WorkersComponent implements OnInit {
   }
 
   createList = (whFormValue) => {
-    console.log(whFormValue);
+    this.db.addWorkerList(whFormValue);
+    this.listForm.reset();
+    this.snackBar.open('Összekészítési lista elkészült!', null, {
+      duration: 2000,
+    });
   }
 
-  addNewProductRow(e) {
+  addProduct(e) {
     e.preventDefault();
-    console.log("work");
-    this.addProducts.push('product' + this.addProducts.length);
+    this.productsInput.push(new FormGroup({
+      product: new FormControl('', [Validators.required]),
+      count: new FormControl('', [Validators.required, Validators.minLength(1)])
+    }));
   }
 
+  removeProduct(e, index) {
+    e.preventDefault();
+    this.productsInput.removeAt(index);
+  }
+
+  changeWorkerForList(event) {
+    this.selectWorkList = null;
+    this.db.getWorkerListByWorkerId(this.selectedWorkerForList).subscribe(resp => {
+      const tempWl = resp as WorkerList[];
+      tempWl.forEach(wl => {
+        wl.products.forEach(p => {
+          p.productObj = this.products.find(pro => pro.pID === p.product);
+        });
+      });
+      this.workerLists = tempWl;
+    });
+  }
+
+  changeWorkListSelected(wList) {
+    this.selectWorkList = wList;
+  }
+
+  changeWorkList(event) {
+    const tempProducts = this.selectWorkList.products;
+    tempProducts.forEach(p => {
+      if (p.product === event.option.value) {
+        p.ready = event.option.selected;
+      }
+    });
+    tempProducts.map(p => delete p.productObj);
+    const data = {
+      wID: this.selectWorkList.wID,
+      products: this.selectWorkList.products
+    };
+    this.db.editWorkerListByWorkerListId(this.selectWorkList.wlID, data);
+    this.snackBar.open('Sikeres frissítés!', null, {
+      duration: 2000,
+    });
+  }
 }
 
 

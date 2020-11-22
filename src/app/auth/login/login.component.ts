@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { User } from 'firebase';
 import { AuthService } from '../auth.service';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { Database } from 'src/app/database.service';
+import firebase from 'firebase';
+import { User } from 'src/app/interfaces/User';
 
 //import { AlertService, AuthenticationService } from '@/_services';
 
@@ -34,10 +36,13 @@ export class LoginComponent implements OnInit {
   submitted = false;
   returnUrl: string;
   user: User;
+  isLoggedIn: boolean;
+  userName: string;
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private db: Database
   ) { }
   loginForm: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.email]),
@@ -45,6 +50,12 @@ export class LoginComponent implements OnInit {
   });
 
   ngOnInit() {
+    this.isLoggedIn = this.authService.isLoggedIn;
+    if (this.isLoggedIn) {
+      this.db.getUser(this.authService.getUserId).subscribe(user => {
+        this.user = user as User;
+      });
+    }
   }
 
   login(): void {

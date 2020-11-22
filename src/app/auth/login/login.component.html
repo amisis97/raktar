@@ -2,7 +2,7 @@
   <mat-card class="login-card">
     <h2>Bejelentkezés</h2>
     <mat-card-content>
-      <form [formGroup]="loginForm" class="loginForm" (ngSubmit)="login()">
+      <form *ngIf="!isLoggedIn" [formGroup]="loginForm" class="loginForm" (ngSubmit)="login()">
           <mat-form-field class="full-width">
             <input matInput placeholder="Email" formControlName="username">
             <mat-error *ngIf="hasError('username', 'required')">Email cím megadása kötelező</mat-error>
@@ -14,6 +14,13 @@
           </mat-form-field>
         <button [disabled]="!loginForm.valid" type="submit" mat-raised-button color="primary">Bejelentkezés</button>
       </form>
+      <div *ngIf="isLoggedIn && user">
+        <p>
+          <mat-toolbar>
+            <span>Bejelentkezve {{user.displayName}} néven...</span>
+          </mat-toolbar>
+        </p>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

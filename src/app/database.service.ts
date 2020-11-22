@@ -182,6 +182,20 @@ export class Database {
       this.db.collection('workers').doc(worker.wID).set(worker);
     }
 
+    addWorkerList(workerList) {
+      workerList.ready = false;
+      this.db.collection('workers_list').add(workerList);
+    }
+
+    getWorkerListByWorkerId(wID) {
+      return this.db.collection('workers_list', ref => ref.where('wID', '==', wID)).valueChanges({idField: 'wlID'});
+    }
+
+    editWorkerListByWorkerListId(workerListId, updatedWorkerList) {
+      const c = 'workers_list/' + workerListId;
+      return this.db.doc(c).update(updatedWorkerList);
+    }
+
     // Bevetelezes
 
     getReceipts() {
@@ -189,7 +203,7 @@ export class Database {
     }
 
     getReceipt(rID: string) {
-      const c = 'receipts/' + rID;
+      const c = 'buy/' + rID;
       return this.db.doc(c).valueChanges();
     }
 

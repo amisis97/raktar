@@ -75,29 +75,57 @@
 <!-- Új terület -->
 <mat-expansion-panel class="add-new-list">
   <mat-expansion-panel-header>Új összekészítési lista hozzáadása</mat-expansion-panel-header>
-  <form autocomplete="off" novalidate (ngSubmit)="createList(whForm.value)"
+  <form [formGroup]="listForm" autocomplete="off" novalidate (ngSubmit)="createList(listForm.value)"
     fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
     <div class="flex">
-      <button class="addnewrow" (click)="addNewProductRow($event)" mat-raised-button color="primary">Új termék
-        hozzáadása</button>
-      <div class="mat-form-field-wrap" *ngFor="let item of addProducts">
+      <mat-form-field>
+        <mat-label>Vásárló</mat-label>
+        <mat-select formControlName="wID" placeholder="" [(value)]="selectedWorker">
+          <mat-option value="{{worker.wID}}" *ngFor="let worker of elements">{{worker.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button (click)="addProduct($event)" mat-raised-button color="primary">Termék hozzáadása</button>
+    </div>
+    <div *ngFor="let control of productsInput.controls; index as i">
+      <ng-container [formGroup]="productsInput.controls[i]">
         <mat-form-field>
-          <mat-label>Termék neve</mat-label>
-          <mat-select formControlName="productId" placeholder="" [(value)]="selectedProduct">
-            <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}}
-              ({{product.productNr}})</mat-option>
+          <mat-label>Termék</mat-label>
+          <mat-select formControlName="product" placeholder="">
+            <mat-option value="{{product.pID}}" *ngFor="let product of products">{{product.name}} ({{product.productNr}})</mat-option>
           </mat-select>
-          <mat-error *ngIf="hasError('name', 'required')">Név megadása kötelező</mat-error>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Mennyiség</mat-label>
-          <input matInput formControlName="stock" type="number" placeholder="" value="" min="1">
-          <!--<span *ngIf="selectedProductObj" matSuffix>{{selectedProductObj.unit}}</span>-->
-          <mat-error *ngIf="hasError('stock', 'required')">Mennyiség megadása kötelező</mat-error>
-          <!--<mat-error *ngIf="hasError('stock', 'min')">Mennyiségnek nagyobbnak kell lennie mint 0</mat-error>-->
+          <input matInput formControlName="count" type="number" placeholder="" value="" min="1">
         </mat-form-field>
-      </div>
+        <button *ngIf="i > 0" mat-raised-button color="primary" (click)="removeProduct($event, i)">Tétel törlése</button>
+      </ng-container>
     </div>
-    <button mat-raised-button color="primary" [disabled]="!whForm.valid">Hozzáadás</button>
+    <button mat-raised-button color="primary" [disabled]="!listForm.valid">Hozzáadás</button>
   </form>
+</mat-expansion-panel>
+
+<mat-expansion-panel class="check-list">
+  <mat-expansion-panel-header>Összekészítési listák raktárosonként</mat-expansion-panel-header>
+  <mat-form-field>
+    <mat-label>Válasszon raktárost</mat-label>
+    <mat-select placeholder="" [(ngModel)]="selectedWorkerForList" (selectionChange)="changeWorkerForList($event)">
+      <mat-option value="{{worker.wID}}" *ngFor="let worker of elements">{{worker.name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="workerLists.length && selectedWorkerForList" class="workLists">
+    <div *ngFor="let wList of workerLists">
+      <mat-expansion-panel (click)="changeWorkListSelected(wList)">
+        <mat-expansion-panel-header>{{wList.wlID}}</mat-expansion-panel-header>
+        <mat-selection-list (selectionChange)="changeWorkList($event)">
+          <mat-list-option *ngFor="let p of wList.products" [selected]="p.ready" [value]="p.product">
+            {{p.productObj.name}} ({{p.productObj.productNr}})
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-expansion-panel>
+    </div>
+  </div>
+  <div *ngIf="!workerLists.length && selectedWorkerForList" class="workLists">
+    Nincs jelenleg még összekészítési listája
+  </div>
 </mat-expansion-panel>
