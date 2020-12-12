@@ -1,6 +1,7 @@
 import { Component, OnInit, DoBootstrap } from '@angular/core';
 import { Database } from 'src/app/database.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/interfaces/User';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class HomeComponent implements OnInit {
 
   email = '';
+  user: User = null;
+  isLoggedIn: boolean;
 
   constructor(
     private db: Database,
@@ -19,6 +22,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.db.getUsers();
+    this.db.getUser(this.auth.getUserId).subscribe(e => {
+      if(typeof(e) !== 'undefined') this.user = e as User;
+    });
   }
 
   getUsers() {

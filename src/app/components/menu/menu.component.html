@@ -1,4 +1,4 @@
-<div id="menu">
+<div id="menu" *ngIf="!isMobile">
   <div *ngIf="!hideProfile" class="profile">
     <img *ngIf="user" class="profile-img" src="{{user.img}}">
     <div class="flex-break"></div>
@@ -19,3 +19,20 @@
     </a>
   </div>
 </div>
+<div id="menu" class="mobile" *ngIf="isMobile">
+  <mat-toolbar *ngIf="isMobile" color="primary">
+    <div class="menu-item" [class.hide]="!user || !menu.visibility.includes(user.role)" [class.active]="menu.url === router.url" *ngFor="let menu of menuItems">
+      <ng-container *ngIf="user && menu.visibility.includes(user.role)">
+        <a [routerLink]="[menu.url]">
+          <i class="material-icons">{{menu.icon}}</i>
+        </a>
+      </ng-container>
+    </div>
+    <div *ngIf="isLoggedIn" class="logout menu-item active">
+      <a (click)="logout()">
+        <i class="material-icons">exit_to_app</i>
+      </a>
+    </div>
+  </mat-toolbar>
+</div>
+

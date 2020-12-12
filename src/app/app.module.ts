@@ -51,6 +51,10 @@ import { SellComponent } from './components/sell/sell.component';
 import { SellPageComponent } from './pages/sell-page/sell-page.component';
 
 import { ChartsModule, ThemeService } from 'ng2-charts';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { WorkerTasksComponent } from './components/worker-tasks/worker-tasks.component';
+
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 @NgModule({
   declarations: [
@@ -79,7 +83,8 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
     ReceiptsPageComponent,
     ReceiptsComponent,
     SellComponent,
-    SellPageComponent
+    SellPageComponent,
+    WorkerTasksComponent
   ],
   entryComponents: [
     DialogDetails,
@@ -118,6 +123,7 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
     MatSortModule,
     MatPaginatorModule,
     ChartsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     AuthService,

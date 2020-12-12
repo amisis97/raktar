@@ -27,3 +27,12 @@
   position: relative;
   padding: 17px;
 }
+.bottom-bar {
+  bottom: 0;
+  z-index: 1000;
+  position: fixed;
+  width: 100%;
+}
+#mainPanel {
+  margin-bottom: 56px;
+}

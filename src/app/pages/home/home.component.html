@@ -1,4 +1,7 @@
 <div class="panel">
   <h1>Kezdőlap</h1>
+  <ng-container *ngIf="user && user.role === 'worker'">
+    <app-worker-tasks></app-worker-tasks>
+  </ng-container>
   <app-tasks></app-tasks>
 </div>

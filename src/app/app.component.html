@@ -1,11 +1,14 @@
 <!--<app-navbar></app-navbar> top bar menu deleted -->
 <mat-sidenav-container autosize class="example-container">
-  <mat-sidenav [class.small]="small" id="leftMenu" mode="side" opened *ngIf="isLoggedIn">
+  <mat-sidenav [class.small]="small" id="leftMenu" mode="side" opened *ngIf="isLoggedIn && !isMobile">
     <i (click)="changeView()" class="change-view material-icons">{{iconName}}</i>
     <app-menu [hideProfile]="small"></app-menu>
   </mat-sidenav>
   <mat-sidenav-content id="mainPanel">
     <router-outlet></router-outlet>
+    <div *ngIf="isMobile" class="bottom-bar">
+      <app-menu [hideProfile]="" [isMobile]="isMobile"></app-menu>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

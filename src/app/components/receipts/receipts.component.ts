@@ -7,6 +7,8 @@ import { Sell } from 'src/app/interfaces/Sell';
 import { Buy } from 'src/app/interfaces/Buy';
 import { Partner } from 'src/app/interfaces/Partner';
 import { firestore } from 'firebase';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/interfaces/User';
 
 @Component({
   selector: 'app-receipts',
@@ -27,16 +29,20 @@ export class ReceiptsComponent implements OnInit {
   selectedProduct = null;
   selectedProductObj: Product;
 
+  user: User;
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     private db: Database,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private auth: AuthService
   ) { }
 
   ngOnInit() {
+    this.db.getUser(this.auth.getUserId).subscribe(u => this.user = u as User);
     this.db.getReceipts().subscribe(receipts => {
       this.elements = receipts as Buy[];
       this.elements.forEach(r => {

@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatTableDataSource, MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { MatTableDataSource, MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatPaginator } from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Database } from 'src/app/database.service';
 import { firestore } from 'firebase';
@@ -20,7 +20,7 @@ export class TasksComponent implements OnInit {
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
 
-
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     private db: Database,
@@ -33,6 +33,7 @@ export class TasksComponent implements OnInit {
     this.db.getTasks().subscribe(tasks => {
       this.elements = tasks as TaskElement[];
       this.dataSource = new MatTableDataSource(this.elements);
+      this.dataSource.paginator = this.paginator;
     });
 
     this.taskForm = new FormGroup({

@@ -1,0 +1,35 @@
+<h2 class="title">{{title}}</h2>
+<h3>Folyamatban lévő listák</h3>
+<div *ngIf="workerLists.length && workerId" class="workLists">
+  <div *ngFor="let wList of workerLists">
+    <mat-expansion-panel (click)="changeWorkListSelected(wList)">
+      <mat-expansion-panel-header>{{wList.wlID}}</mat-expansion-panel-header>
+      <mat-selection-list (selectionChange)="changeWorkList($event)">
+        <mat-list-option *ngFor="let p of wList.products" [selected]="p.ready" [value]="p.product">
+          <span *ngIf="p.productObj">{{p.productObj.name}} ({{p.productObj.productNr}}) - ({{p.productObj.area}})</span>
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-expansion-panel>
+  </div>
+</div>
+<div *ngIf="!workerLists.length && workerId" class="workLists">
+  Nincs jelenleg még összekészítési listája
+</div>
+
+
+<h3>Elkészült listák</h3>
+<div *ngIf="completedLists.length && workerId" class="workLists">
+  <div *ngFor="let cList of completedLists">
+    <mat-expansion-panel (click)="changeWorkListSelected(cList)">
+      <mat-expansion-panel-header>{{cList.wlID}}</mat-expansion-panel-header>
+      <mat-selection-list (selectionChange)="changeWorkList($event)">
+        <mat-list-option *ngFor="let p of cList.products" [selected]="p.ready" [value]="p.product">
+          <span *ngIf="p.productObj">{{p.productObj.name}} ({{p.productObj.productNr}}) - ({{p.productObj.area}})</span>
+        </mat-list-option>
+      </mat-selection-list>
+    </mat-expansion-panel>
+  </div>
+</div>
+<div *ngIf="!completedLists.length && workerId" class="workLists">
+  Nincs jelenleg még elkészült listája
+</div>

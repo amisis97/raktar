@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Product } from 'src/app/interfaces/Product';
-import { MatTableDataSource, MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatTableDataSource, MatSnackBar, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatPaginator } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import { Area } from 'src/app/interfaces/Area';
 import { Partner } from 'src/app/interfaces/Partner';
@@ -26,6 +26,8 @@ export class ProductsComponent implements OnInit {
   selectedArea: string;
   suppliers: Partner[] = [];
   areas: Area[] = [];
+
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     private db: Database,
@@ -54,6 +56,7 @@ export class ProductsComponent implements OnInit {
         });
       });
       this.dataSource = new MatTableDataSource(this.elements);
+      this.dataSource.paginator = this.paginator;
     });
     this.db.getPartners().subscribe(partners => {
       this.suppliers = partners as Partner[];

@@ -79,7 +79,7 @@
     fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
     <div class="flex">
       <mat-form-field>
-        <mat-label>Vásárló</mat-label>
+        <mat-label>Raktáros</mat-label>
         <mat-select formControlName="wID" placeholder="" [(value)]="selectedWorker">
           <mat-option value="{{worker.wID}}" *ngFor="let worker of elements">{{worker.name}}</mat-option>
         </mat-select>

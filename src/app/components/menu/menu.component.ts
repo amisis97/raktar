@@ -21,6 +21,8 @@ export class MenuComponent implements OnInit {
 
   @Input()
   hideProfile: boolean;
+  @Input()
+  isMobile: boolean;
 
   user: User;
   userImg: string;

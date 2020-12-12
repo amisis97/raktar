@@ -49,3 +49,33 @@ $border-bottom: 1px solid #ccc;
 #menu .menu-item i {
   margin-right: 15px;
 }
+
+#menu.mobile mat-toolbar {
+  padding: 0;
+}
+
+#menu.mobile .menu-item {
+  height: 100%;
+  font-size: 12px;
+  padding: 0 5px;
+  flex: 2;
+}
+
+#menu.mobile .menu-item a,
+#menu.mobile .menu-item a:hover,
+#menu.mobile .menu-item a:active,
+#menu.mobile .menu-item a:focus {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#menu.mobile .menu-item i {
+  padding-top: 5px;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+}
+
+#menu.mobile .logout {
+  flex: 1;
+}

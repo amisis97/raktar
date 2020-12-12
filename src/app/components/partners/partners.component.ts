@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Partner } from 'src/app/interfaces/Partner';
-import { MatTableDataSource, MatSnackBar, MatDialog, MatSelect, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatTableDataSource, MatSnackBar, MatDialog, MatSelect, MatDialogRef, MAT_DIALOG_DATA, MatPaginator } from '@angular/material';
 import { Database } from 'src/app/database.service';
 import countriesData from './countries.json';
 import { Product } from 'src/app/interfaces/Product';
@@ -22,6 +22,8 @@ export class PartnersComponent implements OnInit {
   selectedCountry = null;
   countries: string[] = [];
 
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+
   constructor(
     private db: Database,
     private snackBar: MatSnackBar,
@@ -32,6 +34,7 @@ export class PartnersComponent implements OnInit {
     this.db.getPartners().subscribe(partners => {
       this.elements = partners as Partner[];
       this.dataSource = new MatTableDataSource(this.elements);
+      this.dataSource.paginator = this.paginator;
     });
     Object.entries(countriesData).forEach((country) => {
       this.countries.push(`${country[1]} (${country[0]})`);
