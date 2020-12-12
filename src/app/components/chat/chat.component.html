@@ -1,0 +1,22 @@
+<mat-form-field>
+  <mat-label>Válasszon raktárost</mat-label>
+  <mat-select placeholder="" [(ngModel)]="selectedWorkerID" (selectionChange)="changeWorker($event)">
+    <mat-option value="{{worker.wID}}" *ngFor="let worker of workers">{{worker.name}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-card>
+  <mat-card-title>{{chatName}}</mat-card-title>
+  <mat-card-content>
+    <mat-chip-list *ngFor="let msg of messages" [class.me]="msg.sender === userId">
+      <mat-chip [color]="primary" [selected]="msg.sender === userId">
+        <span>{{msg.message}}</span>
+        <small>{{msg.date.toDate().toDateString()}}</small>
+      </mat-chip>
+    </mat-chip-list>
+    <mat-form-field class="type">
+      <textarea [(ngModel)]="sendingMessage" matInput placeholder="Üzenet..."></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="sendMessage()" [disabled]="!sendingMessage.length">Küldés</button>
+  </mat-card-content>
+</mat-card>
+

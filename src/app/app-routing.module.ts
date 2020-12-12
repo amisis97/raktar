@@ -12,6 +12,7 @@ import { StatPageComponent } from './pages/stat-page/stat-page.component';
 import { ReceiptsPageComponent } from './pages/receipts-page/receipts-page.component';
 import { VisibilityService } from './auth/visibility.service';
 import { SellPageComponent } from './pages/sell-page/sell-page.component';
+import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'stat', component: StatPageComponent, canActivate: [LoginGuardService, VisibilityService] },
   { path: 'home', component: HomeComponent, canActivate: [LoginGuardService] },
   { path: 'login', component: LoginComponent },
+  { path: 'chat', component: ChatPageComponent },
   { path: '**', component: HomeComponent, canActivate: [LoginGuardService] },
 ];
 

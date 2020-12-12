@@ -28,7 +28,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher, MatNativeDateModule, MatOption, MatOptionModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule, MatCardModule, MatDialogModule, MatInputModule,
-  MatTableModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule, MatSelect, MatSelectModule } from '@angular/material';
+  MatTableModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule, MatSelect, MatSelectModule, MatChipsModule } from '@angular/material';
 import { HomeComponent } from './pages/home/home.component';
 import { Database } from './database.service';
 // Firebase
@@ -55,6 +55,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { WorkerTasksComponent } from './components/worker-tasks/worker-tasks.component';
 
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { ChatPageComponent } from './pages/chat-page/chat-page.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +86,9 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
     ReceiptsComponent,
     SellComponent,
     SellPageComponent,
-    WorkerTasksComponent
+    WorkerTasksComponent,
+    ChatPageComponent,
+    ChatComponent
   ],
   entryComponents: [
     DialogDetails,
@@ -122,6 +126,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
     MatListModule,
     MatSortModule,
     MatPaginatorModule,
+    MatChipsModule,
     ChartsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],

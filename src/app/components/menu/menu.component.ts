@@ -78,6 +78,12 @@ export class MenuComponent implements OnInit {
       icon: 'equalizer',
       visibility: ['admin']
     },
+    {
+      title: 'Chat',
+      url: '/chat',
+      icon: 'chat',
+      visibility: ['admin', 'worker']
+    },
   ];
 
   ngOnInit() {

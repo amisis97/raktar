@@ -230,4 +230,15 @@ export class Database {
     getSellStat() {
       return this.db.collection('sell').valueChanges({idField: 'sID'});
     }
+
+    // Chat
+
+    getChatByWorker(wID: string) {
+      const c = 'chat/' + wID;
+      return this.db.doc(c).valueChanges();
+    }
+
+    getChats() {
+      return this.db.collection('chat');
+    }
 }
