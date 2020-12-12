@@ -4,7 +4,7 @@
     <i (click)="changeView()" class="change-view material-icons">{{iconName}}</i>
     <app-menu [hideProfile]="small"></app-menu>
   </mat-sidenav>
-  <mat-sidenav-content id="mainPanel">
+  <mat-sidenav-content id="mainPanel" [class.mobile]="isMobile">
     <router-outlet></router-outlet>
     <div *ngIf="isMobile" class="bottom-bar">
       <app-menu [hideProfile]="" [isMobile]="isMobile"></app-menu>

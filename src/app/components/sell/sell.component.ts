@@ -2,11 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { MatTableDataSource, MatSort, MatPaginator, MatSnackBar, MatDialog } from '@angular/material';
 import { firestore } from 'firebase';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Database } from 'src/app/database.service';
 import { Buy } from 'src/app/interfaces/Buy';
 import { Partner } from 'src/app/interfaces/Partner';
 import { Product } from 'src/app/interfaces/Product';
 import { Sell } from 'src/app/interfaces/Sell';
+import { User } from 'src/app/interfaces/User';
 
 @Component({
   selector: 'app-sell',
@@ -31,16 +33,20 @@ export class SellComponent implements OnInit {
     count: new FormControl('', [Validators.required, Validators.minLength(1)])
   })]);
 
+  user: User;
+
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   constructor(
     private db: Database,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private auth: AuthService
   ) { }
 
   ngOnInit() {
+    this.db.getUser(this.auth.getUserId).subscribe(u => this.user = u as User);
     this.db.getSells().subscribe(sells => {
       this.elements = sells as Sell[];
       this.elements.forEach(r => {
