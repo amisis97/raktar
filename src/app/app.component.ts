@@ -23,6 +23,9 @@ export class AppComponent {
     this.isLoggedIn = this.authService.isLoggedIn;
     this.iconName = 'menu_open';
     this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    document.addEventListener('gesturestart', function (e) {
+      e.preventDefault();
+    });
   }
 
   changeView() {
