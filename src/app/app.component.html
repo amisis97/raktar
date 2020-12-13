@@ -6,7 +6,7 @@
   </mat-sidenav>
   <mat-sidenav-content id="mainPanel" [class.mobile]="isMobile">
     <router-outlet></router-outlet>
-    <div *ngIf="isMobile" class="bottom-bar">
+    <div *ngIf="isMobile && isLoggedIn" class="bottom-bar">
       <app-menu [hideProfile]="" [isMobile]="isMobile"></app-menu>
     </div>
   </mat-sidenav-content>
