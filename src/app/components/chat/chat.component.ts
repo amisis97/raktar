@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { firestore } from 'firebase';
+import { send } from 'process';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Database } from 'src/app/database.service';
-import { Chat } from 'src/app/interfaces/Chat';
+import { Chat, Message } from 'src/app/interfaces/Chat';
 import { User } from 'src/app/interfaces/User';
 import { Worker } from 'src/app/interfaces/Worker';
 
@@ -12,11 +14,12 @@ import { Worker } from 'src/app/interfaces/Worker';
 })
 export class ChatComponent implements OnInit {
 
-  messages: Chat[] = [];
+  messages: Message[];
+  currentChat: Chat;
   user: User;
   userId: string;
-  workers: Worker[];
-  selectedWorkerID: string;
+  users: User[];
+  selectedUserID: string;
   chatName: string;
   sendingMessage: string = '';
 
@@ -26,25 +29,48 @@ export class ChatComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.messages = [];
+    this.sendingMessage = '';
     this.userId = this.auth.getUserId;
     this.db.getUser(this.auth.getUserId).subscribe(u => this.user === u as User);
-    this.db.getWorkers().subscribe(wl => this.workers = wl as Worker[]);
+    this.db.getUsers().subscribe(us => this.users = us.filter(u => u.id !== this.auth.getUserId) as User[]);
   }
 
-  changeWorker() {
-    this.db.getChatByWorker(this.selectedWorkerID).subscribe(messages => {
-      this.chatName = this.workers.find(w => w.wID === this.selectedWorkerID).name;
-      if(messages) {
-        this.messages = messages['msg'] as Chat[];
+  changeUser() {
+    this.db.getChatByIDs(this.auth.getUserId, this.selectedUserID).subscribe(messages => {
+      const resp = messages as Chat[];
+      this.currentChat = resp.find(m => m.members.every(me => me === this.auth.getUserId || me === this.selectedUserID));
+      if(this.currentChat) {
+        this.messages = this.currentChat.msg;
       } else {
         this.messages = [];
       }
+      this.chatName = this.users.find(w => w.id === this.selectedUserID).displayName;
     });
   }
 
   sendMessage() {
-    console.log(this.sendingMessage);
+    const tempMsg = this.sendingMessage;
     this.sendingMessage = '';
+    const sendData = {
+      members: [
+        this.auth.getUserId,
+        this.selectedUserID
+      ],
+      msg: [
+        {
+          date: firestore.Timestamp.now(),
+          message: tempMsg,
+          sender: this.auth.getUserId
+        }
+      ]
+    };
+    if(!this.currentChat) {
+      this.db.createNewChat(sendData);
+    } else {
+      sendData.msg = this.currentChat.msg.concat(sendData.msg);
+      this.db.updateChat(this.currentChat.cID, sendData);
+    }
   }
 
 }

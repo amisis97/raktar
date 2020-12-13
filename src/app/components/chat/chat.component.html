@@ -1,22 +1,28 @@
 <mat-form-field>
-  <mat-label>Válasszon raktárost</mat-label>
-  <mat-select placeholder="" [(ngModel)]="selectedWorkerID" (selectionChange)="changeWorker($event)">
-    <mat-option value="{{worker.wID}}" *ngFor="let worker of workers">{{worker.name}}</mat-option>
+  <mat-label>Válasszon egy felhasználót</mat-label>
+  <mat-select placeholder="" [(ngModel)]="selectedUserID" (selectionChange)="changeUser($event)">
+    <mat-option value="{{user.id}}" *ngFor="let user of users">{{user.displayName}}</mat-option>
   </mat-select>
 </mat-form-field>
 <mat-card>
   <mat-card-title>{{chatName}}</mat-card-title>
   <mat-card-content>
-    <mat-chip-list *ngFor="let msg of messages" [class.me]="msg.sender === userId">
-      <mat-chip [color]="primary" [selected]="msg.sender === userId">
-        <span>{{msg.message}}</span>
-        <small>{{msg.date.toDate().toDateString()}}</small>
-      </mat-chip>
-    </mat-chip-list>
-    <mat-form-field class="type">
-      <textarea [(ngModel)]="sendingMessage" matInput placeholder="Üzenet..."></textarea>
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="sendMessage()" [disabled]="!sendingMessage.length">Küldés</button>
+    <i *ngIf="selectedUserID && !messages.length" class="text-center">Jelenleg még nincsennek üzenetek</i>
+    <i *ngIf="!selectedUserID && !messages.length" class="text-center">Válasszon egy felhasználót</i>
+    <div class="msg-wrapper">
+      <mat-chip-list *ngFor="let msg of messages" [class.me]="msg.sender === userId">
+        <mat-chip [selected]="msg.sender === userId">
+          <span>{{msg.message}}</span>
+          <small>{{msg.date.toDate().toDateString()}}</small>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <ng-container *ngIf="selectedUserID">
+      <mat-form-field class="type">
+        <textarea [(ngModel)]="sendingMessage" matInput placeholder="Üzenet..."></textarea>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="sendMessage()" [disabled]="!sendingMessage.length">Küldés</button>
+    </ng-container>
   </mat-card-content>
 </mat-card>
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { auth } from 'firebase/app';
+import { auth, firestore } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from './interfaces/User';
 import { Observable } from 'rxjs';
@@ -28,7 +28,7 @@ export class Database {
     // User metodusok
 
     getUsers() {
-      return this.db.collection('users').valueChanges();
+      return this.db.collection('users').valueChanges({idField: 'id'});
     }
 
     getUser(id: string) {
@@ -233,12 +233,20 @@ export class Database {
 
     // Chat
 
-    getChatByWorker(wID: string) {
-      const c = 'chat/' + wID;
-      return this.db.doc(c).valueChanges();
+    getChatByIDs(fromID: string, toID: string) {
+      return this.db.collection('chat', ref => ref.where('members', 'array-contains-any', [fromID, toID])).valueChanges({idField: 'cID'});
     }
 
     getChats() {
       return this.db.collection('chat');
+    }
+
+    createNewChat(data) {
+      this.db.collection('chat').add(data);
+    }
+
+    updateChat(cID: string, msgData) {
+      const c = 'chat/' + cID;
+      this.db.doc(c).update(msgData);
     }
 }

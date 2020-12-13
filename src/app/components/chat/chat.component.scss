@@ -13,6 +13,11 @@ mat-chip small {
   font-size: 10px;
 }
 
+mat-chip-list {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 mat-chip-list.me {
   display: flex;
   justify-content: flex-end;
@@ -22,4 +27,10 @@ mat-form-field.type {
   margin-top: 10px;
   width: 100%;
   border-top: 1px solid #949494;
+}
+
+.msg-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

@@ -1,7 +1,13 @@
 import { firestore } from 'firebase';
 
-export interface Chat {
+export interface Message {
   date: firestore.Timestamp;
   message: string;
   sender: string;
+}
+
+export interface Chat {
+  cID: string;
+  members: string[];
+  msg: Message[];
 }
