@@ -1,6 +1,6 @@
 <mat-form-field>
   <mat-label>Válasszon egy felhasználót</mat-label>
-  <mat-select placeholder="" [(ngModel)]="selectedUserID" (selectionChange)="changeUser($event)">
+  <mat-select placeholder="" [(ngModel)]="selectedUserID" (selectionChange)="changeUser()">
     <mat-option value="{{user.id}}" *ngFor="let user of users">{{user.displayName}}</mat-option>
   </mat-select>
 </mat-form-field>
