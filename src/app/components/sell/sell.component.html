@@ -37,6 +37,12 @@
           <div *ngIf="element.total">{{element.total}}</div>
         </td>
       </ng-container>
+      <ng-container matColumnDef="print">
+        <th class="align-right" mat-header-cell *matHeaderCellDef>Nyomtatás</th>
+        <td class="align-right" mat-cell *matCellDef="let element">
+          <i (click)="print(element)" class="material-icons">print</i>
+        </td>
+      </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>

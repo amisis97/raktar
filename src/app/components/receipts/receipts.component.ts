@@ -9,6 +9,10 @@ import { Partner } from 'src/app/interfaces/Partner';
 import { firestore } from 'firebase';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/interfaces/User';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-receipts',
@@ -19,7 +23,7 @@ export class ReceiptsComponent implements OnInit {
 
   title = 'Új bevételezés és termékbeszerzési előzmények';
   public whForm: FormGroup;
-  displayedColumns: string[] = ['bID', 'date', 'product', 'seller', 'stock',  'allprice'];
+  displayedColumns: string[] = ['bID', 'date', 'product', 'seller', 'stock',  'allprice', 'print'];
   elements: Buy[] = [];
   dataSource = new MatTableDataSource(this.elements);
   sellers: Partner[];
@@ -118,6 +122,22 @@ export class ReceiptsComponent implements OnInit {
     this.snackBar.open('A termék bevételezve lett a raktárba!', null, {
       duration: 2000,
     });
+  }
+
+  print(buy: Buy) {
+    let pdfcontent = `Bevételezés dátuma - ${buy.date.toDate().toDateString()}`;
+    pdfcontent += `\nTermék neve - ${buy.product.name}`;
+    pdfcontent += `\nTermék cikkszáma - ${buy.product.productNr}`;
+    pdfcontent += `\nTermék beszerzési ára - ${buy.product.purchasePrice}`;
+    pdfcontent += `\nBeszállító azonosítója - ${buy.product.supplier}`;
+    pdfcontent += `\nMennyiség - ${buy.stock}`;
+    pdfcontent += `\nÖsszérték - ${buy.product.purchasePrice * buy.stock}`;
+    let docDefinition = {
+      header: `Bevételezés - ${buy.bID}`,
+      content: pdfcontent,
+    };
+
+    pdfMake.createPdf(docDefinition).open();
   }
 
 }

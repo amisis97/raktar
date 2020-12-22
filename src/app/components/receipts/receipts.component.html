@@ -1,6 +1,6 @@
 <h2 class="title">{{title}}</h2>
 
-<div *ngIf="user && user.role === 'admin'">
+<div [hidden]="!user || user.role !== 'admin'">
   <mat-form-field>
     <mat-label>Kereső</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="keresés...">
@@ -41,6 +41,12 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Össz. ár</th>
         <td mat-cell *matCellDef="let element">
           <div *ngIf="element.product && element.stock">{{element.stock * element.product.purchasePrice}}</div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="print">
+        <th class="align-right" mat-header-cell *matHeaderCellDef>Nyomtatás</th>
+        <td class="align-right" mat-cell *matCellDef="let element">
+          <i (click)="print(element)" class="material-icons">print</i>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

@@ -121,6 +121,7 @@
           <mat-list-option *ngFor="let p of wList.products" [selected]="p.ready" [value]="p.product">
             {{p.productObj.name}} ({{p.productObj.productNr}})
           </mat-list-option>
+          <button (click)="print()" mat-raised-button color="primary">Lista nyomtatása</button>
         </mat-selection-list>
       </mat-expansion-panel>
     </div>

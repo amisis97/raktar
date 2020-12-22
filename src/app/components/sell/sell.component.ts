@@ -9,6 +9,10 @@ import { Partner } from 'src/app/interfaces/Partner';
 import { Product } from 'src/app/interfaces/Product';
 import { Sell } from 'src/app/interfaces/Sell';
 import { User } from 'src/app/interfaces/User';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-sell',
@@ -19,7 +23,7 @@ export class SellComponent implements OnInit {
 
   title = 'Vevői megrendelések és előzmények';
   public whForm: FormGroup;
-  displayedColumns: string[] = ['sID', 'date', 'buyer', 'products', 'total'];
+  displayedColumns: string[] = ['sID', 'date', 'buyer', 'products', 'total', 'print'];
   elements: Sell[] = [];
   dataSource = new MatTableDataSource(this.elements);
   buyers: Partner[];
@@ -145,6 +149,22 @@ export class SellComponent implements OnInit {
     this.snackBar.open('A termék sikeresen eladva!', null, {
       duration: 2000,
     });
+  }
+
+  print(element: Sell) {
+    let pdfcontent = 'Vásárló';
+    pdfcontent += `\n\n${element.partner.name} - ${element.partner.pID}\n\n`;
+    pdfcontent += `Termékek`;
+    element.productsObj.forEach(product => {
+      pdfcontent += `\n${product.name} - ${product.productNr} - ${product.stock} ${product.unit}`;
+    });
+    pdfcontent += `\nÖsszérték - ${element.total}`;
+    let docDefinition = {
+      header: `Értékesítés - ${element.sID} - ${element.date.toDate().toDateString()}`,
+      content: pdfcontent,
+    };
+
+    pdfMake.createPdf(docDefinition).open();
   }
 
 }

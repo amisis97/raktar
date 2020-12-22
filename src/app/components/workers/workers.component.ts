@@ -8,6 +8,10 @@ import { Worker } from 'src/app/interfaces/Worker';
 import firebase from 'firebase';
 import { Partner } from 'src/app/interfaces/Partner';
 import { WorkerList } from 'src/app/interfaces/WorkerList';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-workers',
@@ -184,6 +188,20 @@ export class WorkersComponent implements OnInit {
     this.snackBar.open('Sikeres frissítés!', null, {
       duration: 2000,
     });
+  }
+
+  print() {
+    const worker = this.elements.find(w => w.wID === this.selectWorkList.wID);
+    let pdfcontent = `Termékek`;
+    this.selectWorkList.products.forEach(product => {
+      pdfcontent += `\n${product.productObj.name} - ${product.productObj.productNr} - ${product.count} ${product.productObj.unit}`;
+    });
+    let docDefinition = {
+      header: `Összekészítési lista - ${worker.name} - ${worker.wID}`,
+      content: pdfcontent,
+    };
+
+    pdfMake.createPdf(docDefinition).open();
   }
 }
 
