@@ -9,6 +9,8 @@ import { firestore } from 'firebase';
 import { Buy } from 'src/app/interfaces/Buy';
 import { Warehouse } from 'src/app/interfaces/Warehouse';
 import { ActivatedRoute } from '@angular/router';
+import { User } from 'src/app/interfaces/User';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -28,6 +30,8 @@ export class ProductsComponent implements OnInit {
   suppliers: Partner[] = [];
   areas: Area[] = [];
 
+  user: User;
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -36,9 +40,11 @@ export class ProductsComponent implements OnInit {
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
     private route: ActivatedRoute,
+    private auth: AuthService
   ) { }
 
   ngOnInit() {
+    this.db.getUser(this.auth.getUserId).subscribe(u => this.user = u as User);
     this.db.getProducts().subscribe(products => {
       this.elements = products as Product[];
       this.elements.forEach(e => {
@@ -140,6 +146,7 @@ export class ProductDialogDetails {
   constructor(
     public dialogRef: MatDialogRef<ProductDialogDetails>,
     private db: Database,
+
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: Product) { }
 

@@ -31,38 +31,38 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="unit">
-      <th mat-header-cell *matHeaderCellDef>Mértékegység</th>
-      <td mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" mat-header-cell *matHeaderCellDef>Mértékegység</th>
+      <td [hidden]="!user || user.role !== 'admin'" mat-cell *matCellDef="let element">
         <div *ngIf="element.unit">{{element.unit}}</div>
       </td>
     </ng-container>
     <ng-container matColumnDef="purchasePrice">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Beszállítói ár</th>
-      <td mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" mat-header-cell *matHeaderCellDef mat-sort-header>Beszállítói ár</th>
+      <td [hidden]="!user || user.role !== 'admin'" mat-cell *matCellDef="let element">
         <div *ngIf="element.purchasePrice">{{element.purchasePrice}}</div>
       </td>
     </ng-container>
     <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Eladási ár</th>
-      <td mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" mat-header-cell *matHeaderCellDef mat-sort-header>Eladási ár</th>
+      <td [hidden]="!user || user.role !== 'admin'" mat-cell *matCellDef="let element">
         <div *ngIf="element.price">{{element.price}}</div>
       </td>
     </ng-container>
     <ng-container matColumnDef="supplier">
-      <th mat-header-cell *matHeaderCellDef>Beszállító</th>
-      <td mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" mat-header-cell *matHeaderCellDef>Beszállító</th>
+      <td [hidden]="!user || user.role !== 'admin'" mat-cell *matCellDef="let element">
         <div *ngIf="element.supplier">{{element.supplier}}</div>
       </td>
     </ng-container>
     <ng-container matColumnDef="details">
-      <th class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
-      <td class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
+      <td [hidden]="!user || user.role !== 'admin'" class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
         <i class="material-icons">reorder</i>
       </td>
     </ng-container>
     <ng-container matColumnDef="delete">
-      <th class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
-      <td class="align-right" mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
+      <td [hidden]="!user || user.role !== 'admin'" class="align-right" mat-cell *matCellDef="let element">
         <i (click)="deleteProduct(element.pID)" class="material-icons">delete</i>
       </td>
     </ng-container>

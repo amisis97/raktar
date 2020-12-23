@@ -6,7 +6,7 @@
       <mat-expansion-panel-header>{{wList.wlID}}</mat-expansion-panel-header>
       <mat-selection-list (selectionChange)="changeWorkList($event)">
         <mat-list-option *ngFor="let p of wList.products" [selected]="p.ready" [value]="p.product">
-          <span *ngIf="p.productObj">{{p.productObj.name}} ({{p.productObj.productNr}}) - ({{p.productObj.area}})</span>
+          <span *ngIf="p.productObj">{{p.productObj.name}} ({{p.productObj.productNr}}) - ({{p.productObj.area}}) - {{p.count}} {{p.productObj.unit}}</span>
         </mat-list-option>
       </mat-selection-list>
     </mat-expansion-panel>

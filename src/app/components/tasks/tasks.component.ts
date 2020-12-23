@@ -5,6 +5,8 @@ import { Database } from 'src/app/database.service';
 import { firestore } from 'firebase';
 import { sameDay } from '../../app.component';
 import { TaskElement } from 'src/app/interfaces/TaskElement';
+import { User } from 'src/app/interfaces/User';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-tasks',
@@ -20,17 +22,21 @@ export class TasksComponent implements OnInit {
   dataSource = new MatTableDataSource(this.elements);
   selectedElement = null;
 
+  user: User;
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
     private db: Database,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private auth: AuthService
   ) {
   }
 
   ngOnInit() {
+    this.db.getUser(this.auth.getUserId).subscribe(u => this.user = u as User);
     this.db.getTasks().subscribe(tasks => {
       this.elements = tasks as TaskElement[];
       this.dataSource = new MatTableDataSource(this.elements);

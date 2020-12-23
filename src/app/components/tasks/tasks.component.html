@@ -26,26 +26,26 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="priority">
-      <th mat-header-cell *matHeaderCellDef>Fontos</th>
-      <td mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" mat-header-cell *matHeaderCellDef>Fontos</th>
+      <td [hidden]="!user || user.role !== 'admin'" mat-cell *matCellDef="let element">
         <mat-checkbox #priority (change)="priorityTask(element, priority.checked)" *ngIf="element.priority != null" [(ngModel)]="element.priority"></mat-checkbox>
       </td>
     </ng-container>
     <ng-container matColumnDef="done">
-      <th mat-header-cell *matHeaderCellDef>Kész</th>
-      <td mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" mat-header-cell *matHeaderCellDef>Kész</th>
+      <td [hidden]="!user || user.role !== 'admin'" mat-cell *matCellDef="let element">
         <mat-checkbox #done (change)="doneTask(element, done.checked)" [(ngModel)]="element.done"></mat-checkbox>
       </td>
     </ng-container>
     <ng-container matColumnDef="details">
-      <th class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
-      <td class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" class="align-right" mat-header-cell *matHeaderCellDef>Részletek</th>
+      <td [hidden]="!user || user.role !== 'admin'" class="align-right" (click)="openDialog(element)" mat-cell *matCellDef="let element">
         <i class="material-icons">reorder</i>
       </td>
     </ng-container>
     <ng-container matColumnDef="delete">
-      <th class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
-      <td class="align-right" mat-cell *matCellDef="let element">
+      <th [hidden]="!user || user.role !== 'admin'" class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
+      <td [hidden]="!user || user.role !== 'admin'" class="align-right" mat-cell *matCellDef="let element">
         <i (click)="deleteTask(element.taskId)" class="material-icons">delete</i>
       </td>
     </ng-container>

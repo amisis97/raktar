@@ -40,7 +40,7 @@ export class MenuComponent implements OnInit {
       title: 'Partnerek',
       url: '/partners',
       icon: 'supervised_user_circle',
-      visibility: ['admin', 'worker']
+      visibility: ['admin']
     },
     {
       title: 'Raktár',
