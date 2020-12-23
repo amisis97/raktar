@@ -102,6 +102,7 @@ export class WorkersComponent implements OnInit {
           duration: 4000,
         });
       } else {
+        this.db.deleteWorker(workerId);
         this.snackBar.open('Sikeres törlés!', null, {
           duration: 2000,
         });
