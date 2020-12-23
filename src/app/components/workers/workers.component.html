@@ -33,7 +33,7 @@
     <ng-container matColumnDef="delete">
       <th class="align-right" mat-header-cell *matHeaderCellDef>Törlés</th>
       <td class="align-right" mat-cell *matCellDef="let element">
-        <i (click)="deleteWorker(element.areaId)" class="material-icons">delete</i>
+        <i (click)="deleteWorker(element.wID)" class="material-icons">delete</i>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -119,7 +119,9 @@
         <mat-expansion-panel-header>{{wList.wlID}}</mat-expansion-panel-header>
         <mat-selection-list (selectionChange)="changeWorkList($event)">
           <mat-list-option *ngFor="let p of wList.products" [selected]="p.ready" [value]="p.product">
-            {{p.productObj.name}} ({{p.productObj.productNr}})
+            <ng-container *ngIf="p.productObj">
+              {{p.productObj.name}} ({{p.productObj.productNr}})
+            </ng-container>
           </mat-list-option>
           <button (click)="print()" mat-raised-button color="primary">Lista nyomtatása</button>
         </mat-selection-list>

@@ -27,6 +27,7 @@ import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginato
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher, MatNativeDateModule, MatOption, MatOptionModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule, MatCardModule, MatDialogModule, MatInputModule,
   MatTableModule, MatToolbarModule, MatMenuModule, MatIconModule, MatProgressSpinnerModule, MatSelect, MatSelectModule, MatChipsModule } from '@angular/material';
 import { HomeComponent } from './pages/home/home.component';
@@ -127,6 +128,7 @@ import { ChatComponent } from './components/chat/chat.component';
     MatSortModule,
     MatPaginatorModule,
     MatChipsModule,
+    MatSlideToggleModule,
     ChartsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],

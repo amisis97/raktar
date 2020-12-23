@@ -169,9 +169,10 @@ export class Database {
       return this.db.doc(c).valueChanges();
     }
 
-    /*deleteWorker(wID: string) {
-
-    }*/
+    deleteWorker(wID: string) {
+      const c = 'workers/' + wID;
+      this.db.doc(c).delete();
+    }
 
     editWorker(wID: string, worker: Worker) {
       const c = 'workers/' + wID;

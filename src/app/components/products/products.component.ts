@@ -8,6 +8,7 @@ import { Partner } from 'src/app/interfaces/Partner';
 import { firestore } from 'firebase';
 import { Buy } from 'src/app/interfaces/Buy';
 import { Warehouse } from 'src/app/interfaces/Warehouse';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -33,7 +34,8 @@ export class ProductsComponent implements OnInit {
   constructor(
     private db: Database,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {

@@ -9,7 +9,7 @@
   <mat-card-content>
     <i *ngIf="selectedUserID && !messages.length" class="text-center">Jelenleg még nincsennek üzenetek</i>
     <i *ngIf="!selectedUserID && !messages.length" class="text-center">Válasszon egy felhasználót</i>
-    <div class="msg-wrapper">
+    <div class="msg-wrapper" #scrollMe [scrollTop]="scrollMe.scrollHeight">
       <mat-chip-list *ngFor="let msg of messages" [class.me]="msg.sender === userId">
         <mat-chip [selected]="msg.sender === userId">
           <span>{{msg.message}}</span>

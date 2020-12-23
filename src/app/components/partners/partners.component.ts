@@ -21,6 +21,8 @@ export class PartnersComponent implements OnInit {
   selectedElement = null;
   selectedCountry = null;
   countries: string[] = [];
+  onlySup = false;
+  onlyCust = false;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -40,6 +42,7 @@ export class PartnersComponent implements OnInit {
       this.countries.push(`${country[1]} (${country[0]})`);
     });
     this.selectedCountry = this.countries[0];
+    this.filterType();
 
 
     this.whForm = new FormGroup({
@@ -117,6 +120,25 @@ export class PartnersComponent implements OnInit {
     }
     this.db.addPartner(whFormValue);
     this.whForm.reset();
+  }
+
+  filterType() {
+    this.dataSource = new MatTableDataSource(this.elements.filter(e => {
+      if(this.onlySup && !e.suppliers || this.onlyCust && !e.customer) {
+        return false;
+      }
+      return true;
+    }));
+    this.dataSource.paginator = this.paginator;
+  }
+
+  onlyCustomer() {
+    if(this.onlyCust) {
+      this.dataSource = new MatTableDataSource(this.elements.filter(e => e.customer));
+    } else {
+      this.dataSource = new MatTableDataSource(this.elements);
+    }
+    this.dataSource.paginator = this.paginator;
   }
 
 }

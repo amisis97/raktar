@@ -10,6 +10,7 @@ import { Partner } from 'src/app/interfaces/Partner';
 import { WorkerList } from 'src/app/interfaces/WorkerList';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { worker } from 'cluster';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -86,12 +87,18 @@ export class WorkersComponent implements OnInit {
   }
 
   deleteWorker(workerId: string) {
-    this.db.getWorkers().subscribe(products => {
-      // let p = products.find(obj  => obj.warokers === workerId);
-      // Tipus hiba van
-      let p = null;
-      if(p) {
-        this.snackBar.open('Törlés sikertelen, előbb törölni kell a termékeket!', null, {
+    let error = false;
+    this.db.getWorkerListByWorkerId(workerId).subscribe(lists => {
+      lists.forEach(list => {
+        const temp = list as WorkerList;
+        temp.products.forEach(p => {
+          if (!p.ready) {
+            error = true;
+          }
+        });
+      });
+      if (error) {
+        this.snackBar.open('Törlés sikertelen, minden előkészítési listának késznek kell lennie!', null, {
           duration: 4000,
         });
       } else {
@@ -194,7 +201,7 @@ export class WorkersComponent implements OnInit {
     const worker = this.elements.find(w => w.wID === this.selectWorkList.wID);
     let pdfcontent = `Termékek`;
     this.selectWorkList.products.forEach(product => {
-      pdfcontent += `\n${product.productObj.name} - ${product.productObj.productNr} - ${product.count} ${product.productObj.unit}`;
+      pdfcontent += `\n${product.productObj.name} - ${product.productObj.productNr} - ${product.count} ${product.productObj.unit} - ${product.ready ? 'KÉSZ' : ''}`;
     });
     let docDefinition = {
       header: `Összekészítési lista - ${worker.name} - ${worker.wID}`,

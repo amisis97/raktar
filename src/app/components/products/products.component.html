@@ -15,7 +15,7 @@
     <ng-container matColumnDef="area">
       <th mat-header-cell *matHeaderCellDef>Raktár</th>
       <td mat-cell *matCellDef="let element">
-        <div *ngIf="element.area"><a [routerLink]="['/raktar']">{{element.area}}</a></div>
+        <div *ngIf="element.area"><a [routerLink]="['/raktar', {area: element.area.split('(').pop().split(')')[0]}]">{{element.area}}</a></div>
       </td>
     </ng-container>
     <ng-container matColumnDef="productNr">
